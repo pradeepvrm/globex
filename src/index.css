@@ -1,7 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap');
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap');
-
-:root {
-  font-family: 'Libre Baskerville', serif;
+@theme {
+  --font-libre: 'Libre Baskerville', serif;
 }
