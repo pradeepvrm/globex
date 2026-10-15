@@ -1,0 +1,134 @@
+[
+  {
+    "id": 1,
+    "name": "Women's Denim Jacket",
+    "brand": "Prada",
+    "price": 700,
+    "originalPrice": 1000,
+    "rating": 4.4,
+    "currency": "Rs.",
+    "image": "/images/products/01.jpg",
+    "imageAlt": "Model wearing a blue denim jacket"
+  },
+  {
+    "id": 2,
+    "name": "Women's Leather Jacket",
+    "brand": "Prada",
+    "price": 840,
+    "originalPrice": 1200,
+    "rating": 4.6,
+    "currency": "Rs.",
+    "image": "/images/products/02.jpg",
+    "imageAlt": "Model in a contemporary black jacket"
+  },
+  {
+    "id": 3,
+    "name": "Relaxed Fit Blazer",
+    "brand": "Prada",
+    "price": 910,
+    "originalPrice": 1300,
+    "rating": 4.3,
+    "currency": "Rs.",
+    "image": "/images/products/03.jpg",
+    "imageAlt": "Fashion model wearing a relaxed outfit"
+  },
+  {
+    "id": 4,
+    "name": "Classic Tailored Coat",
+    "brand": "Prada",
+    "price": 1050,
+    "originalPrice": 1500,
+    "rating": 4.7,
+    "currency": "Rs.",
+    "image": "/images/products/04.jpg",
+    "imageAlt": "Portrait of a model in a classic look"
+  },
+  {
+    "id": 5,
+    "name": "Women's Casual Shirt",
+    "brand": "Prada",
+    "price": 630,
+    "originalPrice": 900,
+    "rating": 4.2,
+    "currency": "Rs.",
+    "image": "/images/products/05.jpg",
+    "imageAlt": "Model wearing a casual streetwear outfit"
+  },
+  {
+    "id": 6,
+    "name": "Everyday Cotton T-Shirt",
+    "brand": "Prada",
+    "price": 490,
+    "originalPrice": 700,
+    "rating": 4.5,
+    "currency": "Rs.",
+    "image": "/images/products/06.jpg",
+    "imageAlt": "Folded and styled everyday clothing"
+  },
+  {
+    "id": 7,
+    "name": "Printed Summer Dress",
+    "brand": "Prada",
+    "price": 770,
+    "originalPrice": 1100,
+    "rating": 4.1,
+    "currency": "Rs.",
+    "image": "/images/products/07.jpg",
+    "imageAlt": "Summer fashion look"
+  },
+  {
+    "id": 8,
+    "name": "Women's Utility Jacket",
+    "brand": "Prada",
+    "price": 980,
+    "originalPrice": 1400,
+    "rating": 4.6,
+    "currency": "Rs.",
+    "image": "/images/products/08.jpg",
+    "imageAlt": "Textured jacket in a neutral color"
+  },
+  {
+    "id": 9,
+    "name": "Pleated Midi Skirt",
+    "brand": "Prada",
+    "price": 560,
+    "originalPrice": 800,
+    "rating": 4.3,
+    "currency": "Rs.",
+    "image": "/images/products/09.jpg",
+    "imageAlt": "Model wearing a city-ready outfit"
+  },
+  {
+    "id": 10,
+    "name": "Woven Everyday Top",
+    "brand": "Prada",
+    "price": 700,
+    "originalPrice": 1000,
+    "rating": 4.4,
+    "currency": "Rs.",
+    "image": "/images/products/10.jpg",
+    "imageAlt": "Model wearing a modern casual outfit"
+  },
+  {
+    "id": 11,
+    "name": "Soft Knit Sweater",
+    "brand": "Prada",
+    "price": 840,
+    "originalPrice": 1200,
+    "rating": 4.5,
+    "currency": "Rs.",
+    "image": "/images/products/11.jpg",
+    "imageAlt": "Textured knit clothing"
+  },
+  {
+    "id": 12,
+    "name": "Minimal Leather Watch",
+    "brand": "Prada",
+    "price": 1190,
+    "originalPrice": 1700,
+    "rating": 4.7,
+    "currency": "Rs.",
+    "image": "/images/products/12.jpg",
+    "imageAlt": "Minimal wristwatch"
+  }
+]
