@@ -1,13 +1,52 @@
-export default function ProductCard({ image, title, price, rating, description }) {
+export default function ProductCard({
+  image,
+  name = "Womens Denim Jacket",
+  brand = "Prada",
+  price = 700,
+  originalPrice = 1000,
+  rating = 4.4,
+  currency = "Rs.",
+  imageAlt,
+  onClick,
+}) {
+  const discount = originalPrice > price
+    ? Math.round(((originalPrice - price) / originalPrice) * 100)
+    : 0;
+
   return (
-    <div className="flex flex-col items-center gap-4 rounded-lg border border-white/70 p-6 shadow-[0_0_15px_rgba(0,0,0,0.10)]">
-      <img src={image} alt="" className="h-28 w-full object-cover" />
-      <h3 className="text-lg font-semibold text-[#272727]">{title}</h3>
-      <p className="text-sm text-[#848484]">{price}</p>
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-[#848484]">{rating}</span>
-        <span className="text-xs text-[#848484]">{description}</span>
+    <article
+      onClick={onClick}
+      className="w-full max-w-85 overflow-hidden rounded-lg bg-white shadow-[0_0_20px_rgba(0,0,0,0.05)]"
+    >
+      <div className="aspect-4/3 w-full overflow-hidden rounded-t-lg bg-[#c4c4c4]">
+        {image ? (
+          <img src={image} alt={imageAlt || name} className="h-full w-full object-cover" />
+        ) : (
+          <div className="h-full w-full" />
+        )}
       </div>
-    </div>
+
+      <div className="flex min-h-26 flex-col px-4 py-3 font-libre text-[#272727]">
+        <h2 className="truncate text-[17px] font-bold leading-snug">{name}</h2>
+
+        <div className="mt-1 flex items-center gap-2 text-[13px] leading-normal">
+          <p className="min-w-0 flex-1 truncate">{brand}</p>
+          <div className="flex shrink-0 items-center gap-1.25 text-[#848484]">
+            <span>{rating}</span>
+            <span className="text-[14px] text-[#d9a526]" aria-hidden="true">★</span>
+          </div>
+        </div>
+
+        <div className="mt-auto flex flex-wrap items-baseline gap-x-2 text-[13px] leading-normal">
+          <span className="text-[17px] font-bold">{currency} {price}</span>
+          {discount > 0 && (
+            <>
+              <span className="text-[#848484] line-through">{currency} {originalPrice}</span>
+              <span className="font-bold text-[#0a8200]">({discount}% off)</span>
+            </>
+          )}
+        </div>
+      </div>
+    </article>
   );
 }

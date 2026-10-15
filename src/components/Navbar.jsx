@@ -19,7 +19,7 @@ export default function Navbar({
   }
 
   return (
-    <header className="relative z-40 w-full bg-white shadow-[0_0_15px_rgba(0,0,0,0.10)]">
+    <header className="sticky top-0 z-50 w-full bg-white">
       <nav
         className="mx-auto flex min-h-14 w-full max-w-[1920px] items-center gap-5 px-4 sm:px-6 lg:gap-8 lg:px-10 2xl:px-12"
       >
