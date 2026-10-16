@@ -1,8 +1,10 @@
 
 import './App.css'
+import Cart from './pages/Cart'
 import Home from './pages/Home'
 import Products from './pages/Products'
 import SingleProduct from './pages/SingleProduct'
+import Wishlist from './pages/Wishlist'
 import { BrowserRouter, Routes, Route } from 'react-router'
 
 function App() {
@@ -12,6 +14,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:productId" element={<SingleProduct />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </BrowserRouter>
   )

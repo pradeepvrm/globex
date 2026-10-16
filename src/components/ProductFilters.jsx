@@ -157,7 +157,6 @@ export default function ProductFilters({
               }}
             />
             <input
-              aria-label="Minimum price"
               type="range"
               min={priceBounds.min}
               max={priceBounds.max}
@@ -172,7 +171,6 @@ export default function ProductFilters({
               className="pointer-events-none absolute inset-0 h-5 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-2.5 [&::-moz-range-thumb]:w-2.5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border [&::-moz-range-thumb]:border-[#bdbdbd] [&::-moz-range-thumb]:bg-white [&::-moz-range-track]:bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-2.5 [&::-webkit-slider-thumb]:w-2.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-[#bdbdbd] [&::-webkit-slider-thumb]:bg-white"
             />
             <input
-              aria-label="Maximum price"
               type="range"
               min={priceBounds.min}
               max={priceBounds.max}
