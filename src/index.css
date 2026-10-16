@@ -4,3 +4,7 @@
 @theme {
   --font-libre: 'Libre Baskerville', serif;
 }
+
+.trending-products::-webkit-scrollbar {
+  display: none;
+}
