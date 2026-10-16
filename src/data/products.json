@@ -130,5 +130,38 @@
     "currency": "Rs.",
     "image": "/images/products/12.jpg",
     "imageAlt": "Minimal wristwatch"
+  },
+  {
+    "id": 13,
+    "name": "Printed Summer Dress",
+    "brand": "Prada",
+    "price": 770,
+    "originalPrice": 1100,
+    "rating": 4.1,
+    "currency": "Rs.",
+    "image": "/images/products/07.jpg",
+    "imageAlt": "Summer fashion look"
+  },
+  {
+    "id": 14,
+    "name": "Women's Utility Jacket",
+    "brand": "Prada",
+    "price": 980,
+    "originalPrice": 1400,
+    "rating": 4.6,
+    "currency": "Rs.",
+    "image": "/images/products/08.jpg",
+    "imageAlt": "Textured jacket in a neutral color"
+  },
+  {
+    "id": 15,
+    "name": "Pleated Midi Skirt",
+    "brand": "Prada",
+    "price": 560,
+    "originalPrice": 800,
+    "rating": 4.3,
+    "currency": "Rs.",
+    "image": "/images/products/09.jpg",
+    "imageAlt": "Model wearing a city-ready outfit"
   }
 ]

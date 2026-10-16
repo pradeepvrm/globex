@@ -33,7 +33,7 @@ export default function Navbar({
           {links.map((label) => (
             <a
               key={label}
-              href="#"
+              href={label.toLowerCase().includes("shop") ? "/products" : "#"}
               className="transition-colors hover:text-[#848484]"
             >
               {label}

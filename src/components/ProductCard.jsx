@@ -5,8 +5,6 @@ export default function ProductCard({
   price = 700,
   originalPrice = 1000,
   rating = 4.4,
-  currency = "Rs.",
-  imageAlt,
   onClick,
 }) {
   const discount = originalPrice > price
@@ -20,7 +18,7 @@ export default function ProductCard({
     >
       <div className="aspect-4/3 w-full overflow-hidden rounded-t-lg bg-[#c4c4c4]">
         {image ? (
-          <img src={image} alt={imageAlt || name} className="h-full w-full object-cover" />
+          <img src={image} className="h-full w-full object-cover" />
         ) : (
           <div className="h-full w-full" />
         )}
@@ -38,10 +36,10 @@ export default function ProductCard({
         </div>
 
         <div className="mt-auto flex flex-wrap items-baseline gap-x-2 text-[13px] leading-normal">
-          <span className="text-[17px] font-bold">{currency} {price}</span>
+          <span className="text-[17px] font-bold">Rs. {price}</span>
           {discount > 0 && (
             <>
-              <span className="text-[#848484] line-through">{currency} {originalPrice}</span>
+              <span className="text-[#848484] line-through">Rs. {originalPrice}</span>
               <span className="font-bold text-[#0a8200]">({discount}% off)</span>
             </>
           )}
