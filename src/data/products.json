@@ -8,6 +8,7 @@
     "rating": 4.4,
     "currency": "Rs.",
     "image": "/images/products/01.jpg",
+    "gallery": ["/images/products/detail/womens-denim-jacket.png"],
     "imageAlt": "Model wearing a blue denim jacket"
   },
   {

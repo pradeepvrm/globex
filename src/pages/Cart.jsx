@@ -1,25 +1,25 @@
-import { useState } from "react";
 import { Link } from "react-router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import OrderSummary from "../components/OrderSummary";
-import products from "../data/products.json";
-
-const cartItems = products.slice(0, 2).map((product) => ({ ...product, quantity: 1 }));
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Cart() {
-  const [items, setItems] = useState(cartItems);
+  const [savedItems, setItems, storageError] = useLocalStorage("cartItems", []);
+  const items = Array.isArray(savedItems) ? savedItems.filter((item) => (
+    item && typeof item.id === "number" && Number.isInteger(item.quantity) && item.quantity > 0
+  )) : [];
 
-  function changeQuantity(productId, change) {
+  function changeQuantity(productId, change, size) {
     setItems((currentItems) => currentItems
-      .map((item) => item.id === productId
+      .map((item) => item.id === productId && item.size === size
         ? { ...item, quantity: item.quantity + change }
         : item)
       .filter((item) => item.quantity > 0));
   }
 
-  function removeItem(productId) {
-    setItems((currentItems) => currentItems.filter((item) => item.id !== productId));
+  function removeItem(productId, size) {
+    setItems((currentItems) => currentItems.filter((item) => item.id !== productId || item.size !== size));
   }
 
   return (
@@ -44,22 +44,23 @@ export default function Cart() {
                 </div>
                 <ul className="divide-y divide-[#e8e8e8]">
                   {items.map((item) => (
-                    <li key={item.id} className="grid grid-cols-1 gap-3 p-3 sm:grid-cols-[minmax(0,1fr)_100px_95px] sm:items-center sm:gap-3 sm:px-4 sm:py-4 md:px-5">
+                    <li key={`${item.id}-${item.size || "one-size"}`} className="grid grid-cols-1 gap-3 p-3 sm:grid-cols-[minmax(0,1fr)_100px_95px] sm:items-center sm:gap-3 sm:px-4 sm:py-4 md:px-5">
                       <div className="flex min-w-0 items-center gap-3">
                         <img src={item.image} alt={item.imageAlt} className="h-20 w-16 shrink-0 rounded-md bg-[#f0f0f0] object-cover sm:h-22 sm:w-18" />
                         <div className="min-w-0 font-libre">
                           <p className="text-[10px] text-[#848484]">{item.brand}</p>
                           <h2 className="mt-1 truncate text-xs font-bold text-[#272727] sm:text-sm">{item.name}</h2>
+                          {item.size && <p className="mt-1 text-[10px] text-[#646464]">Size: {item.size}</p>}
                           <p className="mt-1.5 text-xs font-bold text-[#00071b]">Rs. {item.price.toLocaleString("en-IN")}</p>
-                          <button type="button" onClick={() => removeItem(item.id)} className="mt-1.5 text-[10px] text-[#848484] underline underline-offset-2 hover:text-[#00071b]">Remove</button>
+                          <button type="button" onClick={() => removeItem(item.id, item.size)} className="mt-1.5 text-[10px] text-[#848484] underline underline-offset-2 hover:text-[#00071b]">Remove</button>
                         </div>
                       </div>
                       <div className="flex items-center justify-between sm:justify-center">
                         <span className="font-libre text-xs text-[#848484] sm:hidden">Quantity</span>
                         <div className="flex items-center rounded-md border border-[#dedede]">
-                          <button type="button" onClick={() => changeQuantity(item.id, -1)} aria-label={`Decrease ${item.name} quantity`} className="h-7 w-7 text-base text-[#272727] hover:bg-[#f5f5f5]">−</button>
+                          <button type="button" onClick={() => changeQuantity(item.id, -1, item.size)} aria-label={`Decrease ${item.name} quantity`} className="h-7 w-7 text-base text-[#272727] hover:bg-[#f5f5f5]">−</button>
                           <span className="min-w-7 text-center font-libre text-xs text-[#272727]" aria-live="polite">{item.quantity}</span>
-                          <button type="button" onClick={() => changeQuantity(item.id, 1)} aria-label={`Increase ${item.name} quantity`} className="h-7 w-7 text-base text-[#272727] hover:bg-[#f5f5f5]">+</button>
+                          <button type="button" onClick={() => changeQuantity(item.id, 1, item.size)} aria-label={`Increase ${item.name} quantity`} className="h-7 w-7 text-base text-[#272727] hover:bg-[#f5f5f5]">+</button>
                         </div>
                       </div>
                       <div className="flex items-center justify-between font-libre sm:justify-end">
@@ -80,6 +81,7 @@ export default function Cart() {
               <Link to="/products" className="mt-5 inline-flex rounded-md bg-[#00071b] px-4 py-2.5 font-libre text-xs font-bold text-white hover:bg-[#17213a]">Explore products</Link>
             </section>
           )}
+          {storageError && <p role="alert" className="mt-4 font-libre text-sm text-[#b42318]">{storageError}</p>}
         </section>
       </main>
       <Footer />

@@ -4,13 +4,14 @@ import logo from "../assets/logo.png";
 import searchIcon from "../assets/searchIcon.png";
 import heart from "../assets/heart.png";
 import cart from "../assets/cart.png";
+import useLocalStorage from "../hooks/useLocalStorage";
 
-export default function Navbar({
-  userName = "Anne Doe",
-  cartCount = 0,
-  onSearch = () => {},
-}) {
+export default function Navbar({ userName = "Anne Doe", onSearch = () => {} }) {
   const [search, setSearch] = useState("");
+  const [cartItems] = useLocalStorage("cartItems", []);
+  const displayedCartCount = Array.isArray(cartItems)
+    ? cartItems.reduce((total, item) => total + (Number.isInteger(item?.quantity) ? item.quantity : 0), 0)
+    : 0;
 
   const links = ["Men", "Women", "Kids", "Shop", "Contact us"];
 
@@ -76,9 +77,9 @@ export default function Navbar({
               className="relative flex h-8 w-8 items-center justify-center"
             >
               <img src={cart} alt="" className="h-5 w-5" />
-              {cartCount > 0 && (
+              {displayedCartCount > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-black px-1 text-[10px] text-white">
-                  {cartCount}
+                  {displayedCartCount}
                 </span>
               )}
             </button>
