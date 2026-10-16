@@ -1,4 +1,7 @@
+import { Link } from 'react-router'
+
 export default function ProductCard({
+  id,
   image,
   name = "Womens Denim Jacket",
   brand = "Prada",
@@ -17,11 +20,9 @@ export default function ProductCard({
       className="w-full max-w-85 overflow-hidden rounded-lg bg-white shadow-[0_0_20px_rgba(0,0,0,0.05)]"
     >
       <div className="aspect-4/3 w-full overflow-hidden rounded-t-lg bg-[#c4c4c4]">
-        {image ? (
+          <Link to={`/products/${id}`}>
           <img src={image} className="h-full w-full object-cover" />
-        ) : (
-          <div className="h-full w-full" />
-        )}
+          </Link>
       </div>
 
       <div className="flex min-h-26 flex-col px-4 py-3 font-libre text-[#272727]">

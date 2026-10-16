@@ -9,7 +9,7 @@ export default function Wishlist() {
       <Navbar />
       <h1 className="mx-12 mt-10 mb-6 text-blue-950 text-2xl font-bold">My Wishlist</h1>
       <div className="grid grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 xl:grid-cols-4 mx-12 mb-12">
-        {products.map((product) => (
+        {products.slice(4, 8).map((product) => (
           <ProductCard key={product.id} {...product} />
         ))}
       </div>
