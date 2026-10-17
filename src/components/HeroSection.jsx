@@ -47,16 +47,6 @@ export default function HeroSection({
         </div>
       </div>
 
-      {/* Carousel indicators */}
-      <div
-        className="flex justify-center gap-2 py-5"
-        aria-label="Hero banner slide indicators"
-      >
-        <span className="h-2 w-7 rounded-full bg-[#272727]" />
-        <span className="h-2 w-2 rounded-full bg-[#c4c4c4]" />
-        <span className="h-2 w-2 rounded-full bg-[#c4c4c4]" />
-        <span className="h-2 w-2 rounded-full bg-[#c4c4c4]" />
-      </div>
     </section>
   );
 }

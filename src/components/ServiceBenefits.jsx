@@ -17,9 +17,9 @@ export default function ServiceBenefits() {
     <section className="w-full bg-white py-8 sm:py-12">
       <ul className="mx-auto grid max-w-[1920px] grid-cols-1 gap-4 px-[clamp(20px,2.6vw,50px)] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {benefits.map((benefit) => (
-          <li key={benefit.title} className="flex min-h-[clamp(170px,10.52vw,202px)] flex-col items-center rounded-[10px] bg-[#f0f0f0] px-4 py-5 text-center font-libre text-[#272727]">
+          <li key={benefit.title} className="flex min-h-[clamp(170px,10.52vw,202px)] flex-col items-center rounded-[10px] bg-[#f0f0f0] px-4 py-5 text-center text-[#272727]">
             <div className="flex h-14 w-14 items-center justify-center">
-              <img src={benefit.icon} alt="" className="max-h-full max-w-full" loading="lazy" />
+              <img src={benefit.icon} className="max-h-full max-w-full" loading="lazy" />
             </div>
             <h2 className="mt-2 text-base font-bold sm:text-lg xl:text-xl">{benefit.title}</h2>
             <p className="mt-2 text-xs leading-snug sm:text-sm">{benefit.description}</p>

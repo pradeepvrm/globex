@@ -18,7 +18,7 @@ const categories = [
 export default function ShopByCategories() {
   return (
     <section className="w-full bg-white py-10 sm:py-12">
-      <h2 className="mb-6 px-[clamp(20px,2.6vw,50px)] font-libre text-[clamp(22px,1.875vw,36px)] font-bold leading-normal text-[#272727]">
+      <h2 className="mb-6 px-[clamp(20px,2.6vw,50px)] text-[clamp(22px,1.875vw,36px)] font-bold leading-normal text-[#272727]">
         Shop by Categories
       </h2>
       <div className="mx-auto grid max-w-[1920px] grid-cols-2 auto-rows-[clamp(170px,17.22vw,330px)] gap-[clamp(8px,0.73vw,14px)] px-[clamp(20px,2.6vw,50px)] md:grid-cols-12">
@@ -36,8 +36,8 @@ export default function ShopByCategories() {
             />
             <div className="absolute inset-0 bg-black/15" />
             <div className="absolute left-[clamp(12px,1.56vw,30px)] top-[clamp(12px,1.56vw,30px)] text-white">
-              <h3 className="font-libre text-[clamp(13px,1.25vw,24px)] font-bold">{category.title}</h3>
-              <span className="font-libre text-[clamp(11px,0.94vw,18px)]">Explore <span aria-hidden="true">→</span></span>
+              <h3 className="text-[clamp(13px,1.25vw,24px)] font-bold">{category.title}</h3>
+              <span className="text-[clamp(11px,0.94vw,18px)]">Explore <span aria-hidden="true">→</span></span>
             </div>
           </Link>
         ))}

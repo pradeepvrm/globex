@@ -30,7 +30,7 @@ export default function ProductCard({
           </Link>
       </div>
 
-      <div className={`flex flex-col font-libre text-[#272727] ${isTrending ? "min-h-[clamp(74px,6.35vw,122px)] px-[clamp(12px,1.1vw,21px)] py-[clamp(8px,0.625vw,12px)]" : isLarge ? "min-h-30.5 px-5 py-3" : "min-h-26 px-4 py-3"}`}>
+      <div className={`flex flex-col text-[#272727] ${isTrending ? "min-h-[clamp(74px,6.35vw,122px)] px-[clamp(12px,1.1vw,21px)] py-[clamp(8px,0.625vw,12px)]" : isLarge ? "min-h-30.5 px-5 py-3" : "min-h-26 px-4 py-3"}`}>
         <h2 className={`truncate font-bold leading-snug ${isTrending ? "text-[clamp(15px,1.25vw,24px)]" : isLarge ? "text-2xl" : "text-[17px]"}`}>{name}</h2>
 
         <div className={`mt-1 flex items-center gap-2 leading-normal ${isTrending ? "text-[clamp(11px,0.94vw,18px)]" : isLarge ? "text-lg" : "text-[13px]"}`}>

@@ -20,7 +20,7 @@ const colorOptions = [
 
 function SortSelect({ sortBy, onSortChange }) {
   return (
-    <label className="flex items-center gap-2 font-libre text-xs text-[#272727]">
+    <label className="flex items-center gap-2 text-xs text-[#272727]">
       <span>Sort by</span>
       <select
         value={sortBy}
@@ -42,7 +42,7 @@ function AccordionFilter({ title, open, onToggle, children }) {
         type="button"
         aria-expanded={open}
         onClick={onToggle}
-        className="flex min-h-8.5 w-full items-center justify-between py-2 text-left font-libre text-sm text-[#272727] focus-visible:outline focus-visible:-outline-offset-2 focus-visible:outline-[#00398f]"
+        className="flex min-h-8.5 w-full items-center justify-between py-2 text-left text-sm text-[#272727] focus-visible:outline focus-visible:-outline-offset-2 focus-visible:outline-[#00398f]"
       >
         <span>{title}</span>
         <svg
@@ -123,7 +123,7 @@ export default function ProductFilters({
           type="button"
           aria-expanded={filtersOpen}
           onClick={onToggleFilters}
-          className="inline-flex items-center gap-2 rounded-md border border-[#dedede] bg-white px-3 py-2 font-libre text-sm text-[#272727] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#00071b]"
+          className="inline-flex items-center gap-2 rounded-md border border-[#dedede] bg-white px-3 py-2 text-sm text-[#272727] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#00071b]"
         >
           Filters
           <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -135,18 +135,18 @@ export default function ProductFilters({
 
       <aside className={`${filtersOpen ? "block" : "hidden"} rounded-md bg-white px-2.5 pb-1 shadow-[0_0_20px_rgba(0,0,0,0.07)] lg:block`}>
         <div className="flex items-center justify-between pt-3 pb-2">
-          <h1 className="font-libre text-lg font-bold leading-tight text-[#272727]">Filters</h1>
+          <h1 className="text-lg font-bold leading-tight text-[#272727]">Filters</h1>
           <button
             type="button"
             onClick={clearFilters}
-            className="font-libre text-[10px] text-[#00398f] hover:underline focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#00398f]"
+            className="text-[10px] text-[#00398f] hover:underline focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#00398f]"
           >
             Clear all
           </button>
         </div>
 
         <section className="pb-2">
-          <h2 className="mb-1 font-libre text-xs text-[#272727]">Price</h2>
+          <h2 className="mb-1 text-xs text-[#272727]">Price</h2>
           <div className="relative mx-1 h-5">
             <div className="absolute top-2 left-0 right-0 h-0.5 rounded bg-[#a8a8a8]" />
             <div
@@ -190,7 +190,7 @@ export default function ProductFilters({
               <span key={index} className="h-0.5 w-0.5 rounded-full bg-[#272727]" />
             ))}
           </div>
-          <div className="mt-2 grid grid-cols-2 font-libre text-[9px] leading-tight text-[#646464]">
+          <div className="mt-2 grid grid-cols-2 text-[9px] leading-tight text-[#646464]">
             <p>Min<br /><span className="text-[#272727]">Rs. {priceRange.min}</span></p>
             <p className="text-right">Max<br /><span className="text-[#272727]">Rs. {priceRange.max}</span></p>
           </div>
@@ -203,7 +203,7 @@ export default function ProductFilters({
         >
           <div className="space-y-1.5">
             {brands.map((brand) => (
-              <label key={brand} className="flex cursor-pointer items-center gap-2 font-libre text-[11px] text-[#646464]">
+              <label key={brand} className="flex cursor-pointer items-center gap-2 text-[11px] text-[#646464]">
                 <input
                   type="checkbox"
                   checked={selectedBrands.includes(brand)}
@@ -223,7 +223,7 @@ export default function ProductFilters({
         >
           <div className="space-y-1.5">
             {colorOptions.map(([color, swatch]) => (
-              <label key={color} className="flex cursor-pointer items-center gap-2 font-libre text-[11px] text-[#646464]">
+              <label key={color} className="flex cursor-pointer items-center gap-2 text-[11px] text-[#646464]">
                 <input
                   type="checkbox"
                   checked={selectedColors.includes(color)}
@@ -244,7 +244,7 @@ export default function ProductFilters({
         >
           <div className="space-y-1.5">
             {discountOptions.map((discount) => (
-              <label key={discount} className="flex cursor-pointer items-center gap-2 font-libre text-[11px] text-[#646464]">
+              <label key={discount} className="flex cursor-pointer items-center gap-2 text-[11px] text-[#646464]">
                 <input
                   type="checkbox"
                   checked={selectedDiscounts.includes(discount)}

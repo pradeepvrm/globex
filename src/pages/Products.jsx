@@ -81,7 +81,7 @@ export default function Products() {
             />
 
             <div className="min-w-0">
-              <div className="mb-4 hidden items-center justify-between font-libre text-sm text-[#646464] lg:flex">
+              <div className="mb-4 hidden items-center justify-between text-sm text-[#646464] lg:flex">
                 <p aria-live="polite">{visibleProducts.length} products</p>
                 <label className="flex items-center gap-2">
                   Sort by
@@ -98,7 +98,7 @@ export default function Products() {
                 </label>
               </div>
 
-              <div className="mb-4 font-libre text-sm text-[#646464] lg:hidden">
+              <div className="mb-4 text-sm text-[#646464] lg:hidden">
                 <p aria-live="polite">{visibleProducts.length} products</p>
               </div>
 
@@ -111,7 +111,7 @@ export default function Products() {
                   ))}
                 </div>
               ) : (
-                <div className="rounded-lg bg-white px-6 py-16 text-center font-libre text-[#646464] shadow-[0_0_20px_rgba(0,0,0,0.05)]">
+                <div className="rounded-lg bg-white px-6 py-16 text-center text-[#646464] shadow-[0_0_20px_rgba(0,0,0,0.05)]">
                   <p className="text-lg font-bold text-[#272727]">No products found</p>
                   <p className="mt-2">
                     {searchQuery ? "Try another search or adjust your filters." : "Try adjusting your filters."}

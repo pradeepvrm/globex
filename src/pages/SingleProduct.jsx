@@ -4,10 +4,10 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import products from "../data/products.json";
-import useLocalStorage from "../hooks/useLocalStorage";
+import useLocalStorage from "../data/useLocalStorage";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
-const colors = ["Blue", "Mid blue", "Dark blue"];
+const colors = ["Blue", "Black", "White"];
 const tabs = ["Product Details", "Specification", "Ratings & Reviews"];
 
 const reviews = [
@@ -43,7 +43,7 @@ function StarRating({ rating, color = "text-[#d9a526]", size = "text-sm" }) {
 
 function ProductInformation({ product }) {
   return (
-    <div className="max-w-3xl space-y-6 font-libre text-[#272727]">
+    <div className="max-w-3xl space-y-6 text-[#272727]">
       <section>
         <h2 className="text-lg font-bold">Product Details</h2>
         <p className="mt-2 text-sm leading-6 text-[#646464]">
@@ -79,7 +79,7 @@ function ProductSpecifications({ product }) {
   ];
 
   return (
-    <dl className="max-w-3xl divide-y divide-[#e8e8e8] font-libre">
+    <dl className="max-w-3xl divide-y divide-[#e8e8e8]">
       {specificationRows.map(([label, value]) => (
         <div key={label} className="grid grid-cols-[minmax(110px,0.6fr)_minmax(0,1fr)] gap-4 py-3 text-sm">
           <dt className="text-[#646464]">{label}</dt>
@@ -92,7 +92,7 @@ function ProductSpecifications({ product }) {
 
 function ProductReviews({ product, image }) {
   return (
-    <section className="font-libre">
+    <section className="">
       <h2 className="text-xl font-bold text-[#272727]">Ratings</h2>
       <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
         <p className="text-4xl text-[#272727]">{product.rating.toFixed(1)}</p>
@@ -126,7 +126,7 @@ function ProductReviews({ product, image }) {
           </article>
         ))}
       </div>
-      <button type="button" className="mt-4 font-libre text-sm font-bold text-[#00398f] underline underline-offset-4">
+      <button type="button" className="mt-4 text-sm font-bold text-[#00398f] underline underline-offset-4">
         View all Reviews
       </button>
     </section>
@@ -136,7 +136,7 @@ function ProductReviews({ product, image }) {
 function ProductRail({ title, items }) {
   return (
     <section className="mt-14">
-      <h2 className="mb-5 font-libre text-2xl font-bold text-[#272727] sm:text-3xl">{title}</h2>
+      <h2 className="mb-5 text-2xl font-bold text-[#272727] sm:text-3xl">{title}</h2>
       <div className="flex gap-5 overflow-x-auto pb-5 sm:gap-10" aria-label={title}>
         {items.map((item) => (
           <div key={item.id} className="w-[clamp(260px,21.35vw,410px)] shrink-0">
@@ -159,7 +159,6 @@ function SingleProductView({ productId }) {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [sizeChartOpen, setSizeChartOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [, setCartItems, cartStorageError] = useLocalStorage("cartItems", []);
   const [savedWishlistIds, setWishlistIds, wishlistStorageError] = useLocalStorage("wishlistItems", []);
@@ -171,9 +170,9 @@ function SingleProductView({ productId }) {
       <>
         <Navbar />
         <main className="flex min-h-[55vh] flex-col items-center justify-center bg-[#f9faff] px-4 text-center">
-          <h1 className="font-libre text-2xl font-bold text-[#272727]">Product not found</h1>
-          <p className="mt-2 font-libre text-sm text-[#646464]">The product you are looking for may have been removed.</p>
-          <Link to="/products" className="mt-5 rounded-md bg-[#00071b] px-5 py-3 font-libre text-sm font-bold text-white hover:bg-[#17213a]">
+          <h1 className="text-2xl font-bold text-[#272727]">Product not found</h1>
+          <p className="mt-2 text-sm text-[#646464]">The product you are looking for may have been removed.</p>
+          <Link to="/products" className="mt-5 rounded-md bg-[#00071b] px-5 py-3 text-sm font-bold text-white hover:bg-[#17213a]">
             Browse products
           </Link>
         </main>
@@ -240,7 +239,7 @@ function SingleProductView({ productId }) {
             </div>
           </div>
 
-          <section className="min-w-0 font-libre text-[#272727]">
+          <section className="min-w-0 text-[#272727]">
             <h1 className="text-2xl font-bold leading-tight sm:text-3xl 2xl:text-[36px]">{displayName}</h1>
             <p className="mt-3 text-lg sm:text-xl">{product.brand}</p>
             <p className="mt-3 text-sm text-[#646464]">Sold By : Sellers Name</p>
@@ -263,7 +262,7 @@ function SingleProductView({ productId }) {
             <div className="mt-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-bold">Select Size</h2>
-                <button type="button" onClick={() => setSizeChartOpen(true)} className="text-sm text-[#00398f] hover:underline">
+                <button type="button" className="text-sm text-[#00398f] hover:underline">
                   Size Chart <span aria-hidden="true">›</span>
                 </button>
               </div>
@@ -348,7 +347,7 @@ function SingleProductView({ productId }) {
                 aria-selected={activeTab === tab}
                 aria-controls="product-tab-panel"
                 onClick={() => setActiveTab(tab)}
-                className={`min-h-12 flex-1 border-b-2 px-2 font-libre text-xs transition-colors sm:text-base ${activeTab === tab ? "border-[#002482] text-[#002482]" : "border-transparent text-[#848484] hover:text-[#272727]"}`}
+                className={`min-h-12 flex-1 border-b-2 px-2 text-xs transition-colors sm:text-base ${activeTab === tab ? "border-[#002482] text-[#002482]" : "border-transparent text-[#848484] hover:text-[#272727]"}`}
               >
                 {tab}
               </button>
@@ -367,26 +366,6 @@ function SingleProductView({ productId }) {
           <ProductRail title="Customer Also Like" items={alsoLiked} />
         </div>
       </main>
-
-      {sizeChartOpen && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50 p-4" onMouseDown={(event) => {
-          if (event.target === event.currentTarget) setSizeChartOpen(false);
-        }}>
-          <section role="dialog" aria-modal="true" aria-labelledby="size-chart-title" className="w-full max-w-lg rounded-lg bg-white p-6 font-libre shadow-xl">
-            <div className="flex items-center justify-between">
-              <h2 id="size-chart-title" className="text-xl font-bold text-[#272727]">Size Chart</h2>
-              <button type="button" onClick={() => setSizeChartOpen(false)} aria-label="Close size chart" className="text-2xl text-[#646464] hover:text-[#272727]">×</button>
-            </div>
-            <p className="mt-2 text-sm text-[#646464]">Measurements are in inches.</p>
-            <div className="mt-5 grid grid-cols-4 gap-y-3 border-t border-[#e8e8e8] pt-4 text-sm">
-              <span className="font-bold">Size</span><span className="font-bold">Bust</span><span className="font-bold">Waist</span><span className="font-bold">Length</span>
-              <span>S</span><span>36</span><span>34</span><span>24</span>
-              <span>M</span><span>38</span><span>36</span><span>25</span>
-              <span>L</span><span>40</span><span>38</span><span>26</span>
-            </div>
-          </section>
-        </div>
-      )}
       <Footer />
     </>
   );

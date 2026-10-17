@@ -42,7 +42,7 @@ export default function Footer({
           <div className="flex h-10 w-10 items-center justify-center sm:h-12 sm:w-12">
             <img src={logoFooter} alt="" className="h-full w-full object-contain" />
           </div>
-          <a href="/" className="font-libre text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <a href="/" className="text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             {logo}
           </a>
         </div>
@@ -50,11 +50,11 @@ export default function Footer({
         <div className="grid grid-cols-2 gap-y-8 sm:grid-cols-3 lg:grid-cols-6 ">
           {footerSections.map((section) => (
             <nav key={section.title}>
-              <h2 className="mb-4 font-libre text-base font-bold sm:text-lg">{section.title}</h2>
+              <h2 className="mb-4 text-base font-bold sm:text-lg">{section.title}</h2>
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link}>
-                    <a href="#" className="font-libre text-2xs text-white/90 transition-colors hover:text-white hover:underline sm:text-sm">{link}</a>
+                    <a href="#" className="text-2xs text-white/90 transition-colors hover:text-white hover:underline sm:text-sm">{link}</a>
                   </li>
                 ))}
               </ul>
@@ -62,8 +62,8 @@ export default function Footer({
           ))}
 
           <section className="col-span-2 sm:col-span-3 lg:col-span-1">
-            <h2 className="mb-4 font-libre text-base font-bold sm:text-lg">Stay In Touch</h2>
-            <p className="mb-4 max-w-md font-libre text-xs leading-5 text-white/90 sm:text-sm">
+            <h2 className="mb-4 text-base font-bold sm:text-lg">Stay In Touch</h2>
+            <p className="mb-4 max-w-md text-xs leading-5 text-white/90 sm:text-sm">
               Stay in touch to get special offers, free giveaways and once in a lifetime deals.
             </p>
             <form onSubmit={handleSubmit} className="flex w-full max-w-xl">
@@ -74,9 +74,9 @@ export default function Footer({
                   <path d="m3.75 7.5 8.25 6 8.25-6" stroke="currentColor" strokeWidth="1.5" />
                 </svg>
                 <input id="footer-email" name="email" type="email" required placeholder="Enter your email"
-                  className="min-w-0 flex-1 bg-transparent py-2 font-libre text-xs text-white outline-none placeholder:text-[#ababab] sm:text-sm" />
+                  className="min-w-0 flex-1 bg-transparent py-2 text-xs text-white outline-none placeholder:text-[#ababab] sm:text-sm" />
               </div>
-              <button type="submit" className="rounded-r-sm border border-white px-3 font-libre text-xs transition-colors hover:bg-white hover:text-[#00071b] sm:text-sm">
+              <button type="submit" className="rounded-r-sm border border-white px-3 text-xs transition-colors hover:bg-white hover:text-[#00071b] sm:text-sm">
                 Join
               </button>
             </form>
@@ -86,7 +86,7 @@ export default function Footer({
 
       <div className="border-t border-white/70">
         <div className="mx-12 justify-center gap-x-40 flex max-w-[1920px] flex-col items-center gap-5 px-6 py-5 sm:px-8 lg:flex-row  lg:px-[5%]">
-          <div className="flex flex-wrap justify-center gap-x-40 gap-y-3 font-libre text-xs sm:text-sm">
+          <div className="flex flex-wrap justify-center gap-x-40 gap-y-3 text-xs sm:text-sm">
             <a href="#" className="transition-opacity hover:opacity-70">Terms & Conditions</a>
             <a href="#" className="transition-opacity hover:opacity-70">Privacy Policy</a>
           </div>

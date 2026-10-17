@@ -14,7 +14,7 @@ const deals = [
 export default function DealsOfTheDay() {
   return (
     <section className="w-full overflow-hidden bg-white py-10 sm:py-12">
-      <h2 className="mb-6 px-[clamp(20px,2.6vw,50px)] font-libre text-[clamp(22px,1.875vw,36px)] font-bold leading-normal text-[#272727]">
+      <h2 className="mb-6 px-[clamp(20px,2.6vw,50px)] text-[clamp(22px,1.875vw,36px)] font-bold leading-normal text-[#272727]">
         Deals of the Day
       </h2>
       <ul className="flex gap-[clamp(24px,3.65vw,70px)] overflow-x-auto px-[clamp(20px,2.6vw,50px)] pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -30,7 +30,7 @@ export default function DealsOfTheDay() {
                 className="block aspect-[489/298] w-full object-cover"
                 loading="lazy"
               />
-              <div className="flex min-h-[clamp(180px,14.12vw,271px)] flex-col items-center px-4 py-6 text-center font-libre text-[#272727] sm:py-8">
+              <div className="flex min-h-[clamp(180px,14.12vw,271px)] flex-col items-center px-4 py-6 text-center text-[#272727] sm:py-8">
                 <div className="flex h-[clamp(38px,3.4vw,65px)] items-center justify-center">
                   <img src={levisLogo} alt="Levi's" className="max-h-full max-w-full" />
                 </div>

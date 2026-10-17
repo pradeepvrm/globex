@@ -1,18 +1,24 @@
 import { Link, useNavigate } from "react-router";
+import { UserButton, useUser } from "@clerk/react";
 import logo from "../assets/logo.png";
 import heart from "../assets/heart.png";
 import cart from "../assets/cart.png";
 import useLocalStorage from "../data/useLocalStorage";
 import SearchAutocomplete from "./SearchAutocomplete";
 
-export default function Navbar({ userName = "Anne Doe" }) {
+export default function Navbar() {
   const navigate = useNavigate();
+  const { isLoaded, isSignedIn, user } = useUser();
   const [cartItems] = useLocalStorage("cartItems", []);
   const displayedCartCount = Array.isArray(cartItems)
     ? cartItems.reduce((total, item) => total + (Number.isInteger(item?.quantity) ? item.quantity : 0), 0)
     : 0;
 
   const links = ["Men", "Women", "Kids", "Shop", "Contact us"];
+  const userName = user?.fullName
+    || user?.username
+    || user?.primaryEmailAddress?.emailAddress
+    || "My account";
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white shadow-md">
@@ -65,12 +71,21 @@ export default function Navbar({ userName = "Anne Doe" }) {
             </button>
           </Link>
           
-          <button
-            type="button"
-            className="hidden text-[15px] text-[#646464] transition-colors hover:text-black lg:inline-flex"
-          >
-            {userName}
-          </button>
+          {isLoaded && (isSignedIn ? (
+            <div className="flex items-center gap-2">
+              <UserButton />
+              <span className="hidden max-w-36 truncate text-[15px] text-[#646464] lg:inline-flex">
+                {userName}
+              </span>
+            </div>
+          ) : (
+            <Link
+              to="/sign-in"
+              className="text-[15px] text-[#646464] transition-colors hover:text-black"
+            >
+              Sign in
+            </Link>
+          ))}
         </div>
       </nav>
     </header>

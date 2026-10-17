@@ -15,9 +15,9 @@ function ReviewCard() {
         {[0, 1, 2, 3, 4].map((star) => (
           <img key={star} src={star === 4 ? emptyStar : filledStar} alt="" className="h-[clamp(14px,1.25vw,24px)] w-[clamp(14px,1.25vw,24px)]" />
         ))}
-        <span className="ml-2 font-libre text-xs text-[#272727]">4.4</span>
+        <span className="ml-2 text-xs text-[#272727]">4.4</span>
       </div>
-      <p className="mt-5 font-libre text-[clamp(13px,1.25vw,24px)] leading-snug text-[#272727]">
+      <p className="mt-5 text-[clamp(13px,1.25vw,24px)] leading-snug text-[#272727]">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dui vel morbi cursus sed sodales molestie proin dictum gravida. Porttitor maecenas tincidunt ipsum semper malesuada. In sapien feugiat laoreet convallis eu sed. Sapien et montes, duis tempor euismod augue cras eu eget. Risus suspendisse mauris ullamcorper.
       </p>
     </article>
@@ -36,7 +36,7 @@ export default function CustomerTestimonials() {
 
   return (
     <section className="w-full overflow-hidden bg-white py-10 sm:py-12">
-      <h2 className="mb-6 px-[clamp(20px,2.6vw,50px)] font-libre text-[clamp(22px,1.875vw,36px)] font-bold leading-normal text-[#272727]">
+      <h2 className="mb-6 px-[clamp(20px,2.6vw,50px)] text-[clamp(22px,1.875vw,36px)] font-bold leading-normal text-[#272727]">
         What Our Customer Says
       </h2>
       <div className="relative">

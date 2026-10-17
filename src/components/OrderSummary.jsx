@@ -1,24 +1,31 @@
 export default function OrderSummary({ items }) {
   const quantity = items.reduce((total, item) => total + item.quantity, 0);
   const total = items.reduce((amount, item) => amount + item.price * item.quantity, 0);
+  const shipping =  total > 1000 ? 0 : 50;
 
   return (
-    <section className="rounded-xl border border-[#e8e8e8] bg-white p-4 shadow-[0_0_20px_rgba(0,0,0,0.04)] sm:p-5 lg:sticky lg:top-20" aria-labelledby="order-summary-title">
-      <h2 id="order-summary-title" className="font-libre text-base font-bold text-[#00071b]">Order summary</h2>
-      <div className="mt-4 space-y-3 font-libre text-xs text-[#646464]">
+    <section className="rounded-xl border border-[#e8e8e8] bg-white p-4 shadow-[0_0_20px_rgba(0,0,0,0.04)] sm:p-5 lg:sticky lg:top-20">
+      <h2 className="text-base font-bold text-[#00071b]">Order summary</h2>
+      <div className="mt-4 space-y-3 text-xs text-[#646464]">
         <div className="flex justify-between gap-4">
           <span>Items ({quantity})</span>
           <span className="font-bold text-[#272727]">Rs.{total}</span>
         </div>
         <div className="flex justify-between gap-4">
-          <span>Total quantity</span>
-          <span className="font-bold text-[#272727]">{quantity}</span>
+          <span>Shipping</span>
+          {shipping === 0 ? (
+            <span className="font-bold text-[#272727]">
+              <span className="line-through">Rs.50</span> Free
+            </span>
+          ) : (
+            <span className="font-bold text-[#272727]">Rs.50</span>
+          )}
         </div>
       </div>
       <div className="my-4 border-t border-[#e8e8e8]" />
-      <div className="flex justify-between gap-4 font-libre text-sm font-bold text-[#00071b]">
+      <div className="flex justify-between gap-4 text-sm font-bold text-[#00071b]">
         <span>Total</span>
-        <span>Rs.{total}</span>
+        <span>Rs.{total + shipping}</span>
       </div>
       <button
         type="button"
@@ -27,7 +34,7 @@ export default function OrderSummary({ items }) {
       >
         Proceed to checkout
       </button>
-      <p className="mt-3 text-center font-libre text-[10px] text-[#848484]">Shipping and taxes calculated at checkout.</p>
+      <p className="mt-3 text-center text-[10px] text-[#848484]">Shipping and taxes calculated at checkout.</p>
     </section>
   );
 }

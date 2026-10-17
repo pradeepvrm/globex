@@ -136,7 +136,7 @@
     "id": 13,
     "name": "Printed Summer Dress",
     "brand": "Prada",
-    "price": 770,
+    "price": 870,
     "originalPrice": 1100,
     "rating": 4.1,
     "currency": "Rs.",
@@ -147,7 +147,7 @@
     "id": 14,
     "name": "Women's Utility Jacket",
     "brand": "Prada",
-    "price": 980,
+    "price": 780,
     "originalPrice": 1400,
     "rating": 4.6,
     "currency": "Rs.",
@@ -158,11 +158,33 @@
     "id": 15,
     "name": "Pleated Midi Skirt",
     "brand": "Prada",
-    "price": 560,
+    "price": 660,
     "originalPrice": 800,
     "rating": 4.3,
     "currency": "Rs.",
     "image": "/images/products/09.jpg",
     "imageAlt": "Model wearing a city-ready outfit"
+  },
+  {
+    "id": 16,
+    "name": "Classic Tailored Coat",
+    "brand": "Prada",
+    "price": 1250,
+    "originalPrice": 1500,
+    "rating": 4.7,
+    "currency": "Rs.",
+    "image": "/images/products/04.jpg",
+    "imageAlt": "Portrait of a model in a classic look"
+  },
+  {
+    "id": 17,
+    "name": "Women's Casual Shirt",
+    "brand": "Prada",
+    "price": 530,
+    "originalPrice": 900,
+    "rating": 4.2,
+    "currency": "Rs.",
+    "image": "/images/products/05.jpg",
+    "imageAlt": "Model wearing a casual streetwear outfit"
   }
 ]
