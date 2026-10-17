@@ -3,10 +3,12 @@ import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import ProductFilters from "../components/ProductFilters";
 import products from "../data/products.json";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { useMemo, useState } from "react";
 
 export default function Products() {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search")?.trim().toLowerCase() ?? "";
   const prices = products.map((product) => product.price);
   const priceBounds = {
     min: Math.min(...prices),
@@ -28,6 +30,7 @@ export default function Products() {
       return product.price >= priceRange.min
         && product.price <= priceRange.max
         && selectedBrands.includes(product.brand)
+        && (!searchQuery || `${product.name} ${product.brand}`.toLowerCase().includes(searchQuery))
         && (selectedDiscounts.length === 0 || selectedDiscounts.some((threshold) => discount >= threshold));
     });
 
@@ -47,7 +50,7 @@ export default function Products() {
       default:
         return filtered;
     }
-  }, [priceRange, selectedBrands, selectedDiscounts, sortBy]);
+  }, [priceRange, searchQuery, selectedBrands, selectedDiscounts, sortBy]);
 
   function clearFilters() {
     setPriceRange(priceBounds);
@@ -110,7 +113,9 @@ export default function Products() {
               ) : (
                 <div className="rounded-lg bg-white px-6 py-16 text-center font-libre text-[#646464] shadow-[0_0_20px_rgba(0,0,0,0.05)]">
                   <p className="text-lg font-bold text-[#272727]">No products found</p>
-                  <p className="mt-2">Try adjusting your filters.</p>
+                  <p className="mt-2">
+                    {searchQuery ? "Try another search or adjust your filters." : "Try adjusting your filters."}
+                  </p>
                   <button
                     type="button"
                     onClick={clearFilters}

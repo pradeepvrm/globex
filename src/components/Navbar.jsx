@@ -1,24 +1,18 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import logo from "../assets/logo.png";
-import searchIcon from "../assets/searchIcon.png";
 import heart from "../assets/heart.png";
 import cart from "../assets/cart.png";
-import useLocalStorage from "../hooks/useLocalStorage";
+import useLocalStorage from "../data/useLocalStorage";
+import SearchAutocomplete from "./SearchAutocomplete";
 
-export default function Navbar({ userName = "Anne Doe", onSearch = () => {} }) {
-  const [search, setSearch] = useState("");
+export default function Navbar({ userName = "Anne Doe" }) {
+  const navigate = useNavigate();
   const [cartItems] = useLocalStorage("cartItems", []);
   const displayedCartCount = Array.isArray(cartItems)
     ? cartItems.reduce((total, item) => total + (Number.isInteger(item?.quantity) ? item.quantity : 0), 0)
     : 0;
 
   const links = ["Men", "Women", "Kids", "Shop", "Contact us"];
-
-  function submitSearch(event) {
-    event.preventDefault();
-    onSearch(search.trim());
-  }
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white shadow-md">
@@ -43,23 +37,9 @@ export default function Navbar({ userName = "Anne Doe", onSearch = () => {} }) {
           ))}
         </div>
 
-        {/* Search */}
-        <form onSubmit={submitSearch} role="search" className="ml-auto hidden min-w-32 max-w-107.5 flex-1 md:flex">
-          <label htmlFor="navbar-search" className="sr-only">Search products</label>
-          <div className="flex h-11 w-full items-center rounded-lg bg-[#f0f0f0] px-4 transition-shadow focus-within:ring-2 focus-within:ring-black/20">
-            <input
-              id="navbar-search"
-              type="search"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search here"
-              className="min-w-0 flex-1 bg-transparent text-sm text-[#272727] outline-none placeholder:text-[#848484] lg:text-base"
-            />
-            <button type="submit" className="ml-3 shrink-0 text-[#272727]">
-              <img src={searchIcon} alt="" className="h-4.5 w-4.5" />
-            </button>
-          </div>
-        </form>
+        <SearchAutocomplete
+          onSearch={(query) => navigate(`/products?search=${encodeURIComponent(query)}`)}
+        />
 
         {/* Actions */}
         <div className="ml-auto flex shrink-0 items-center gap-4 sm:gap-5 md:ml-0 lg:gap-6">
