@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "category": "women",
     "name": "Women's Denim Jacket",
     "brand": "Prada",
     "price": 700,
@@ -15,8 +16,9 @@
   },
   {
     "id": 2,
+    "category": "women",
     "name": "Women's Leather Jacket",
-    "brand": "Prada",
+    "brand": "Levi's",
     "price": 840,
     "originalPrice": 1200,
     "rating": 4.6,
@@ -29,6 +31,7 @@
   },
   {
     "id": 3,
+    "category": "men",
     "name": "Relaxed Fit Blazer",
     "brand": "Prada",
     "price": 910,
@@ -43,8 +46,9 @@
   },
   {
     "id": 4,
+    "category": "men",
     "name": "Classic Tailored Coat",
-    "brand": "Prada",
+    "brand": "Gucci",
     "price": 1050,
     "originalPrice": 1500,
     "rating": 4.7,
@@ -57,8 +61,9 @@
   },
   {
     "id": 5,
+    "category": "women",
     "name": "Women's Casual Shirt",
-    "brand": "Prada",
+    "brand": "Levi's",
     "price": 630,
     "originalPrice": 900,
     "rating": 4.2,
@@ -71,8 +76,9 @@
   },
   {
     "id": 6,
+    "category": "men",
     "name": "Everyday Cotton T-Shirt",
-    "brand": "Prada",
+    "brand": "Chanel",
     "price": 490,
     "originalPrice": 700,
     "rating": 4.5,
@@ -85,6 +91,7 @@
   },
   {
     "id": 7,
+    "category": "women",
     "name": "Printed Summer Dress",
     "brand": "Prada",
     "price": 770,
@@ -99,8 +106,9 @@
   },
   {
     "id": 8,
+    "category": "women",
     "name": "Women's Utility Jacket",
-    "brand": "Prada",
+    "brand": "Levi's",
     "price": 980,
     "originalPrice": 1400,
     "rating": 4.6,
@@ -113,8 +121,9 @@
   },
   {
     "id": 9,
+    "category": "women",
     "name": "Pleated Midi Skirt",
-    "brand": "Prada",
+    "brand": "Gucci",
     "price": 560,
     "originalPrice": 800,
     "rating": 4.3,
@@ -127,6 +136,7 @@
   },
   {
     "id": 10,
+    "category": "women",
     "name": "Woven Everyday Top",
     "brand": "Prada",
     "price": 700,
@@ -141,8 +151,9 @@
   },
   {
     "id": 11,
+    "category": "men",
     "name": "Soft Knit Sweater",
-    "brand": "Prada",
+    "brand": "Levi's",
     "price": 840,
     "originalPrice": 1200,
     "rating": 4.5,
@@ -155,6 +166,7 @@
   },
   {
     "id": 12,
+    "category": "men",
     "name": "Minimal Leather Watch",
     "brand": "Prada",
     "price": 1190,
@@ -169,6 +181,7 @@
   },
   {
     "id": 13,
+    "category": "women",
     "name": "Floral Wrap Dress",
     "brand": "Prada",
     "price": 870,
@@ -183,8 +196,9 @@
   },
   {
     "id": 14,
+    "category": "women",
     "name": "Women's Utility Jacket",
-    "brand": "Prada",
+    "brand": "Chanel",
     "price": 780,
     "originalPrice": 1400,
     "rating": 4.6,
@@ -197,8 +211,9 @@
   },
   {
     "id": 15,
+    "category": "women",
     "name": "Pleated Midi Skirt",
-    "brand": "Prada",
+    "brand": "Gucci",
     "price": 660,
     "originalPrice": 800,
     "rating": 4.3,
@@ -211,6 +226,7 @@
   },
   {
     "id": 16,
+    "category": "men",
     "name": "Classic Tailored Coat",
     "brand": "Prada",
     "price": 1250,
@@ -225,8 +241,9 @@
   },
   {
     "id": 17,
+    "category": "women",
     "name": "Women's Casual Shirt",
-    "brand": "Prada",
+    "brand": "Levi's",
     "price": 530,
     "originalPrice": 900,
     "rating": 4.2,
@@ -239,6 +256,7 @@
   },
   {
     "id": 18,
+    "category": "women",
     "name": "High-Waist Straight Jeans",
     "brand": "Prada",
     "price": 890,
@@ -253,6 +271,7 @@
   },
   {
     "id": 19,
+    "category": "women",
     "name": "Ribbed Tank Top",
     "brand": "Prada",
     "price": 390,
@@ -267,6 +286,7 @@
   },
   {
     "id": 20,
+    "category": "men",
     "name": "Oversized Linen Shirt",
     "brand": "Prada",
     "price": 720,
@@ -281,6 +301,7 @@
   },
   {
     "id": 21,
+    "category": "women",
     "name": "Wide-Leg Trousers",
     "brand": "Prada",
     "price": 950,
@@ -295,8 +316,9 @@
   },
   {
     "id": 22,
+    "category": "women",
     "name": "Quilted Shoulder Bag",
-    "brand": "Prada",
+    "brand": "Chanel",
     "price": 1150,
     "originalPrice": 1600,
     "rating": 4.7,
@@ -309,6 +331,7 @@
   },
   {
     "id": 23,
+    "category": "men",
     "name": "Classic White Sneakers",
     "brand": "Prada",
     "price": 990,
@@ -323,6 +346,7 @@
   },
   {
     "id": 24,
+    "category": "women",
     "name": "Leather Crossbody Bag",
     "brand": "Prada",
     "price": 1090,
@@ -337,8 +361,9 @@
   },
   {
     "id": 25,
+    "category": "women",
     "name": "Gold-Tone Hoop Earrings",
-    "brand": "Prada",
+    "brand": "Gucci",
     "price": 450,
     "originalPrice": 650,
     "rating": 4.3,
@@ -351,6 +376,7 @@
   },
   {
     "id": 26,
+    "category": "women",
     "name": "Minimal Pendant Necklace",
     "brand": "Prada",
     "price": 520,
@@ -365,8 +391,9 @@
   },
   {
     "id": 27,
+    "category": "men",
     "name": "Relaxed Cotton Shorts",
-    "brand": "Prada",
+    "brand": "Levi's",
     "price": 580,
     "originalPrice": 850,
     "rating": 4.1,
@@ -379,6 +406,7 @@
   },
   {
     "id": 28,
+    "category": "men",
     "name": "Striped Knit Polo",
     "brand": "Prada",
     "price": 690,
@@ -393,8 +421,9 @@
   },
   {
     "id": 29,
+    "category": "women",
     "name": "Structured Mini Bag",
-    "brand": "Prada",
+    "brand": "Gucci",
     "price": 1020,
     "originalPrice": 1450,
     "rating": 4.6,
@@ -407,6 +436,7 @@
   },
   {
     "id": 30,
+    "category": "men",
     "name": "Lightweight Trench Coat",
     "brand": "Prada",
     "price": 1390,
@@ -418,5 +448,65 @@
       "https://images.unsplash.com/photo-1548126032-079a0fb0099d?auto=format&fit=crop&w=800&q=80"
     ],
     "imageAlt": "Lightweight trench coat"
+  },
+  {
+    "id": 31,
+    "category": "kids",
+    "name": "Kids' Graphic T-Shirt",
+    "brand": "Levi's",
+    "price": 390,
+    "originalPrice": 550,
+    "rating": 4.5,
+    "currency": "Rs.",
+    "image": "https://images.unsplash.com/photo-1503919005314-30d93d07d823?auto=format&fit=crop&w=800&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1503919005314-30d93d07d823?auto=format&fit=crop&w=800&q=80"
+    ],
+    "imageAlt": "Colorful graphic T-shirt for kids"
+  },
+  {
+    "id": 32,
+    "category": "kids",
+    "name": "Kids' Denim Overalls",
+    "brand": "Prada",
+    "price": 690,
+    "originalPrice": 950,
+    "rating": 4.6,
+    "currency": "Rs.",
+    "image": "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=800&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=800&q=80"
+    ],
+    "imageAlt": "Children's denim outfit"
+  },
+  {
+    "id": 33,
+    "category": "kids",
+    "name": "Kids' Canvas Sneakers",
+    "brand": "Gucci",
+    "price": 590,
+    "originalPrice": 800,
+    "rating": 4.4,
+    "currency": "Rs.",
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80"
+    ],
+    "imageAlt": "Bright canvas sneakers for kids"
+  },
+  {
+    "id": 34,
+    "category": "kids",
+    "name": "Kids' Cozy Hoodie",
+    "brand": "Levi's",
+    "price": 650,
+    "originalPrice": 900,
+    "rating": 4.7,
+    "currency": "Rs.",
+    "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=80"
+    ],
+    "imageAlt": "Soft cozy hoodie for kids"
   }
 ]

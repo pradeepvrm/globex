@@ -32,9 +32,6 @@ export default function SearchAutocomplete({ onSearch }) {
       event.preventDefault();
       setIsOpen(true);
       setActiveIndex((index) => (index <= 0 ? suggestions.length - 1 : index - 1));
-    } else if (event.key === "Escape") {
-      setIsOpen(false);
-      setActiveIndex(-1);
     } else if (event.key === "Enter" && activeIndex >= 0 && suggestions[activeIndex]) {
       event.preventDefault();
       submitSearch(suggestions[activeIndex].name);

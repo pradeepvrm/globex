@@ -7,18 +7,27 @@ import useLocalStorage from "../data/useLocalStorage";
 import SearchAutocomplete from "./SearchAutocomplete";
 
 export default function Navbar() {
-  const navigate = useNavigate();
   const { isLoaded, isSignedIn, user } = useUser();
-  const [cartItems] = useLocalStorage("cartItems", []);
+  const userId = user?.id ?? "guest";
+
+  return (
+    <NavbarContent
+      key={userId}
+      isLoaded={isLoaded}
+      isSignedIn={isSignedIn}
+      cartStorageKey={`cartItems:${userId}`}
+    />
+  );
+}
+
+function NavbarContent({ isLoaded, isSignedIn, cartStorageKey }) {
+  const navigate = useNavigate();
+  const [cartItems] = useLocalStorage(cartStorageKey, []);
   const displayedCartCount = Array.isArray(cartItems)
     ? cartItems.reduce((total, item) => total + (Number.isInteger(item?.quantity) ? item.quantity : 0), 0)
     : 0;
 
-  const links = ["Men", "Women", "Kids", "Shop", "Contact us"];
-  const userName = user?.fullName
-    || user?.username
-    || user?.primaryEmailAddress?.emailAddress
-    || "My account";
+  const categoryLinks = ["Men", "Women", "Kids"];
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white shadow-md">
@@ -32,15 +41,17 @@ export default function Navbar() {
 
         {/* Nav links */}
         <div className="hidden shrink-0 items-center gap-5 whitespace-nowrap text-[15px] text-[#272727] md:flex lg:gap-6 lg:text-[16px] xl:gap-8 m-auto">
-          {links.map((label) => (
-            <a
+          {categoryLinks.map((label) => (
+            <Link
               key={label}
-              href={label.toLowerCase().includes("shop") ? "/products" : "#"}
+              to={`/products?category=${label.toLowerCase()}`}
               className="transition-colors hover:text-[#848484]"
             >
               {label}
-            </a>
+            </Link>
           ))}
+          <Link to="/products" className="transition-colors hover:text-[#848484]">Shop</Link>
+          <a href="#" className="transition-colors hover:text-[#848484]">Contact us</a>
         </div>
 
         <SearchAutocomplete
@@ -63,7 +74,7 @@ export default function Navbar() {
               className="relative flex h-8 w-8 items-center justify-center"
             >
               <img src={cart} alt="" className="h-5 w-5" />
-              {displayedCartCount > 0 && (
+              {isLoaded && displayedCartCount > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-black px-1 text-[10px] text-white">
                   {displayedCartCount}
                 </span>
@@ -72,11 +83,8 @@ export default function Navbar() {
           </Link>
           
           {isLoaded && (isSignedIn ? (
-            <div className="flex items-center gap-2">
-              <UserButton />
-              <span className="hidden max-w-36 truncate text-[15px] text-[#646464] lg:inline-flex">
-                {userName}
-              </span>
+            <div className="rounded-full border border-white/10 bg-white/50 p-1.5 shadow-sm shadow-slate-950/20">
+              <UserButton showName />
             </div>
           ) : (
             <Link

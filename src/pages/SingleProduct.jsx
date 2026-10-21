@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useUser } from "@clerk/react";
 import { Link, useParams } from "react-router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -116,7 +117,7 @@ function ProductReviews({ product, image }) {
                   key={index}
                   src={image}
                   alt={`Customer photo ${index + 1} for ${product.name}`}
-                  className="h-20 w-20 rounded-lg object-cover sm:h-28 sm:w-28"
+                  className="h-20 w-20 rounded-lg object-contain sm:h-28 sm:w-28 lg:h-32 lg:w-32"
                 />
               ))}
             </div>
@@ -150,20 +151,44 @@ function ProductRail({ title, items }) {
 
 export default function SingleProduct() {
   const { productId } = useParams();
-  return <SingleProductView key={productId} productId={productId} />;
+  const { isLoaded, user } = useUser();
+  const userId = user?.id ?? "guest";
+
+  if (!isLoaded) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex min-h-[55vh] items-center justify-center bg-[#f9faff] text-sm text-[#646464]">
+          Loading product...
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  return (
+    <SingleProductView
+      key={`${productId}:${userId}`}
+      productId={productId}
+      cartStorageKey={`cartItems:${userId}`}
+      wishlistStorageKey={`wishlistItems:${userId}`}
+    />
+  );
 }
 
-function SingleProductView({ productId }) {
+function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
   const product = products.find((item) => item.id === Number(productId));
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [message, setMessage] = useState("");
-  const [, setCartItems, cartStorageError] = useLocalStorage("cartItems", []);
-  const [savedWishlistIds, setWishlistIds, wishlistStorageError] = useLocalStorage("wishlistItems", []);
+  const [cartItems, setCartItems, cartStorageError] = useLocalStorage(cartStorageKey, []);
+  const [savedWishlistIds, setWishlistIds, wishlistStorageError] = useLocalStorage(wishlistStorageKey, []);
   const wishlistIds = Array.isArray(savedWishlistIds) ? savedWishlistIds : [];
   const isFavorite = product ? wishlistIds.includes(product.id) : false;
+  const inCart = Array.isArray(cartItems)
+    ? cartItems.find((item) => item.id === product.id && item.size === selectedSize)
+    : false;
 
   if (!product) {
     return (
@@ -194,8 +219,12 @@ function SingleProductView({ productId }) {
   const alsoLiked = products.filter((item) => item.id !== product.id).slice(4, 9);
   const displayName = product.id === 1 ? "Womens Denim Jacket (Blue)" : product.name;
 
-  function addToBag() {
-    const saved = setCartItems((currentItems) => {
+  function toggleCartItem() {
+    setCartItems((currentItems) => {
+      if (inCart) {
+        return currentItems.filter((item) => item.id !== product.id || item.size !== selectedSize);
+      }
+
       const existingItem = currentItems.find((item) => item?.id === product.id && item.size === selectedSize);
       return existingItem
         ? currentItems.map((item) => item?.id === product.id && item.size === selectedSize
@@ -203,9 +232,6 @@ function SingleProductView({ productId }) {
           : item)
         : [...currentItems, { ...product, size: selectedSize, quantity: 1 }];
     });
-    setMessage(saved
-      ? `${product.name} has been added to your cart.`
-      : "This product could not be saved to your cart. Please try again.");
   }
 
   function toggleWishlist() {
@@ -226,7 +252,6 @@ function SingleProductView({ productId }) {
                   key={`${image}-${index}`}
                   type="button"
                   onClick={() => setSelectedImageIndex(index)}
-                  aria-label={`Show product image ${index + 1}`}
                   aria-pressed={selectedImageIndex === index}
                   className={`aspect-square w-16 shrink-0 overflow-hidden rounded-lg border-2 bg-white transition-colors sm:w-20 min-[900px]:w-full ${selectedImageIndex === index ? "border-[#00398f]" : "border-transparent"}`}
                 >
@@ -235,7 +260,7 @@ function SingleProductView({ productId }) {
               ))}
             </div>
             <div className="order-1 aspect-4/3 min-w-0 overflow-hidden rounded-lg bg-[#e9edf2] sm:aspect-5/4 min-[900px]:order-2 min-[900px]:aspect-837/900">
-              <img src={heroImage} alt={product.imageAlt} className="h-full w-full object-cover" />
+              <img src={heroImage} className="h-full w-full object-contain" />
             </div>
           </div>
 
@@ -274,7 +299,6 @@ function SingleProductView({ productId }) {
                     aria-pressed={selectedSize === size}
                     onClick={() => {
                       setSelectedSize(size);
-                      setMessage("");
                     }}
                     className={`flex h-11 w-11 items-center justify-center rounded-full border text-sm transition-colors ${selectedSize === size ? "border-[#002482] bg-[#002482] text-white" : "border-[#d8d8d8] bg-white text-[#272727] hover:border-[#002482]"}`}
                   >
@@ -315,10 +339,10 @@ function SingleProductView({ productId }) {
             <div className="mt-7 flex flex-wrap items-center gap-4">
               <button
                 type="button"
-                onClick={addToBag}
+                onClick={toggleCartItem}
                 className="rounded-md bg-[#002482] px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-[#001b64] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#002482]"
               >
-                Add to cart
+                {inCart ? "Remove from cart" : "Add to cart"}
               </button>
               <button
                 type="button"
@@ -328,7 +352,6 @@ function SingleProductView({ productId }) {
               >
                 {isFavorite ? "♥" : "♡"}
               </button>
-              {message && <p role="status" aria-live="polite" className="w-full text-sm text-[#00398f]">{message}</p>}
               {(cartStorageError || wishlistStorageError) && (
                 <p role="alert" className="w-full text-sm text-[#b42318]">{cartStorageError || wishlistStorageError}</p>
               )}

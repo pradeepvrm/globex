@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/react";
 import { Link } from "react-router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -5,7 +6,26 @@ import OrderSummary from "../components/OrderSummary";
 import useLocalStorage from "../data/useLocalStorage";
 
 export default function Cart() {
-  const [savedItems, setItems, storageError] = useLocalStorage("cartItems", []);
+  const { isLoaded, user } = useUser();
+  const userId = user?.id ?? "guest";
+
+  if (!isLoaded) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen bg-[#f9faff] px-4 py-12 text-center text-sm text-[#646464]">
+          Loading cart...
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  return <CartForUser key={userId} storageKey={`cartItems:${userId}`} />;
+}
+
+function CartForUser({ storageKey }) {
+  const [savedItems, setItems, storageError] = useLocalStorage(storageKey, []);
   const items = Array.isArray(savedItems) ? savedItems.filter((item) => (
     item && typeof item.id === "number" && Number.isInteger(item.quantity) && item.quantity > 0
   )) : [];

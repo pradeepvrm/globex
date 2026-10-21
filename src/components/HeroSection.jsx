@@ -1,9 +1,7 @@
 import heroLeft from "../assets/heroLeft.png";
 import heroRight from "../assets/heroRight.png";
 
-export default function HeroSection({
-  onExplore,
-}) {
+export default function HeroSection() {
   return (
     <section className="w-full overflow-hidden bg-white">
       <div className="grid min-h-100 w-full grid-cols-1 md:min-h-100 md:grid-cols-2 lg:h-160 lg:min-h-0">
@@ -38,7 +36,6 @@ export default function HeroSection({
 
             <button
               type="button"
-              onClick={onExplore}
               className="mt-10 rounded-[10px] border-2 border-[#222222] px-8 py-2 text-xl text-[#272727] transition-colors hover:bg-[#222222] hover:text-white focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-[#222222] sm:text-2xl"
             >
               Explore

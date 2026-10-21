@@ -9,12 +9,27 @@ import { useMemo, useState } from "react";
 export default function Products() {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search")?.trim().toLowerCase() ?? "";
-  const prices = products.map((product) => product.price);
-  const priceBounds = {
-    min: Math.min(...prices),
-    max: Math.max(...prices),
-  };
-  const brands = [...new Set(products.map((product) => product.brand))];
+  const category = searchParams.get("category")?.trim().toLowerCase() ?? "";
+
+  return <ProductListing key={category} category={category} searchQuery={searchQuery} />;
+}
+
+function ProductListing({ category, searchQuery }) {
+  const categoryProducts = useMemo(
+    () => category ? products.filter((product) => product.category === category) : products,
+    [category],
+  );
+  const priceBounds = useMemo(() => {
+    const prices = categoryProducts.map((product) => product.price);
+    return {
+      min: prices.length ? Math.min(...prices) : 0,
+      max: prices.length ? Math.max(...prices) : 0,
+    };
+  }, [categoryProducts]);
+  const brands = useMemo(
+    () => [...new Set(categoryProducts.map((product) => product.brand))],
+    [categoryProducts],
+  );
   const [priceRange, setPriceRange] = useState(priceBounds);
   const [selectedBrands, setSelectedBrands] = useState(brands);
   const [selectedDiscounts, setSelectedDiscounts] = useState([]);
@@ -22,7 +37,7 @@ export default function Products() {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const visibleProducts = useMemo(() => {
-    const filtered = products.filter((product) => {
+    const filtered = categoryProducts.filter((product) => {
       const discount = product.originalPrice > product.price
         ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
         : 0;
@@ -50,7 +65,7 @@ export default function Products() {
       default:
         return filtered;
     }
-  }, [priceRange, searchQuery, selectedBrands, selectedDiscounts, sortBy]);
+  }, [categoryProducts, priceRange, searchQuery, selectedBrands, selectedDiscounts, sortBy]);
 
   function clearFilters() {
     setPriceRange(priceBounds);
@@ -81,6 +96,9 @@ export default function Products() {
             />
 
             <div className="min-w-0">
+              {category && (
+                <h1 className="mb-5 text-2xl font-bold text-[#272727] capitalize">{category}</h1>
+              )}
               <div className="mb-4 hidden items-center justify-between text-sm text-[#646464] lg:flex">
                 <p aria-live="polite">{visibleProducts.length} products</p>
                 <label className="flex items-center gap-2">

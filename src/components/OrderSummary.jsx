@@ -1,4 +1,8 @@
+import { useLocation, useNavigate } from "react-router";
+
 export default function OrderSummary({ items }) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const quantity = items.reduce((total, item) => total + item.quantity, 0);
   const total = items.reduce((amount, item) => amount + item.price * item.quantity, 0);
   const shipping =  total > 1000 ? 0 : 50;
@@ -29,6 +33,7 @@ export default function OrderSummary({ items }) {
       </div>
       <button
         type="button"
+        onClick={() => navigate("/checkout", { state: { backgroundLocation: location } })}
         disabled={quantity === 0}
         className="mt-5 w-full rounded-md bg-blue-950 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-[#17213a] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#00071b] disabled:cursor-not-allowed disabled:bg-[#a5a9b1]"
       >

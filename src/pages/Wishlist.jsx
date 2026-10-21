@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/react";
 import { Link } from "react-router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -6,7 +7,26 @@ import products from "../data/products.json";
 import useLocalStorage from "../data/useLocalStorage";
 
 export default function Wishlist() {
-  const [savedWishlistIds, setWishlistIds, storageError] = useLocalStorage("wishlistItems", []);
+  const { isLoaded, user } = useUser();
+  const userId = user?.id ?? "guest";
+
+  if (!isLoaded) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-[55vh] bg-[#f9faff] px-4 py-12 text-center text-sm text-[#646464]">
+          Loading wishlist...
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  return <WishlistForUser key={userId} storageKey={`wishlistItems:${userId}`} />;
+}
+
+function WishlistForUser({ storageKey }) {
+  const [savedWishlistIds, setWishlistIds, storageError] = useLocalStorage(storageKey, []);
   const wishlistIds = Array.isArray(savedWishlistIds)
     ? savedWishlistIds.filter((id) => Number.isInteger(id))
     : [];
