@@ -35,7 +35,7 @@ export default function CustomerTestimonials() {
   }
 
   return (
-    <section className="w-full overflow-hidden bg-white py-10 sm:py-12">
+    <section className="w-full overflow-hidden bg-white pt-10">
       <h2 className="mb-6 px-[clamp(20px,2.6vw,50px)] text-[clamp(22px,1.875vw,36px)] font-bold leading-normal text-[#272727]">
         What Our Customer Says
       </h2>

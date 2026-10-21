@@ -51,7 +51,7 @@ function NavbarContent({ isLoaded, isSignedIn, cartStorageKey }) {
             </Link>
           ))}
           <Link to="/products" className="transition-colors hover:text-[#848484]">Shop</Link>
-          <a href="#" className="transition-colors hover:text-[#848484]">Contact us</a>
+          <Link to="/contact" className="transition-colors hover:text-[#848484]">Contact us</Link>
         </div>
 
         <SearchAutocomplete

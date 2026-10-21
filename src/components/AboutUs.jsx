@@ -2,10 +2,10 @@ import aboutus from "../assets/aboutus.png";
 
 export default function AboutUs() {
   return (
-    <section className="w-full bg-white px-5 py-12 text-[#272727] sm:px-8 md:px-12 lg:px-12.5 lg:py-20">
+    <section className="w-full bg-white px-5 text-[#272727] sm:px-8 md:px-12 lg:px-12.5">
       <div className="mx-auto max-w-360">
 
-        <div className="mt-4 grid grid-cols-1 items-start gap-10 lg:mt-12 lg:grid-cols-2 lg:gap-12">
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-12 pb-12">
           {/* About text */}
           <div className="flex flex-col items-start">
             <h3 className="text-xl font-bold leading-snug sm:text-3xl">

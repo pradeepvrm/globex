@@ -3,13 +3,14 @@ import instagram from "../assets/instagram.png";
 import logoFooter from "../assets/logo-footer.png";
 import twitter from "../assets/twitter.png";
 import whatsapp from "../assets/whatsapp.png";
+import { Link } from "react-router";
 
 const footerSections = [
   { title: "Women", links: ["All Women", "Skirts", "T-Shirts", "Tops", "Jackets"] },
   { title: "Kids", links: ["All Kids", "Shirts", "T-Shirts", "Shorts", "Jackets"] },
   { title: "Men", links: ["All Men", "Shirts", "T-Shirts", "Shorts", "Jackets"] },
   { title: "Shopping", links: ["Your cart", "Your orders", "Compared items", "Wishlist", "Shipping Details"] },
-  { title: "More links", links: ["Blogs", "Gift center", "Buying guides", "New arrivals", "Clearance"] },
+  { title: "More links", links: ["Blogs", "Gift center", "Buying guides", "New arrivals", "Clearance", "Contact us"] },
 ];
 
 const socialIcons = {
@@ -54,7 +55,11 @@ export default function Footer({
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link}>
-                    <a href="#" className="text-2xs text-white/90 transition-colors hover:text-white hover:underline sm:text-sm">{link}</a>
+                    {link === "Contact us" ? (
+                      <Link to="/contact" className="text-2xs text-white/90 transition-colors hover:text-white hover:underline sm:text-sm">{link}</Link>
+                    ) : (
+                      <a href="#" className="text-2xs text-white/90 transition-colors hover:text-white hover:underline sm:text-sm">{link}</a>
+                    )}
                   </li>
                 ))}
               </ul>

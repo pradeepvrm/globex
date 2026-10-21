@@ -171,11 +171,11 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
                   <div className="grid gap-3 sm:grid-cols-2">
                     <label className="text-xs font-medium text-[#344054]">
                       PIN code
-                      <input required inputMode="numeric" pattern="[0-9]{6}" maxLength={6} autoComplete="postal-code" placeholder="6-digit PIN code" className="mt-1.5 h-11 w-full rounded-lg border border-[#d0d5dd] px-3 text-sm font-normal text-[#101828] outline-none transition placeholder:text-[#98a2b3] focus:border-[#667085] focus:ring-2 focus:ring-[#101828]/10" />
+                      <input required type="number" pattern="[0-9]{6}" minLength={6} maxLength={6} autoComplete="postal-code" placeholder="6-digit PIN code" className="mt-1.5 h-11 w-full rounded-lg border border-[#d0d5dd] px-3 text-sm font-normal text-[#101828] outline-none transition placeholder:text-[#98a2b3] focus:border-[#667085] focus:ring-2 focus:ring-[#101828]/10" />
                     </label>
                     <label className="text-xs font-medium text-[#344054]">
                       Phone number
-                      <input required type="tel" inputMode="tel" pattern="[0-9+ -]{10,15}" autoComplete="tel" placeholder="+91 98765 43210" className="mt-1.5 h-11 w-full rounded-lg border border-[#d0d5dd] px-3 text-sm font-normal text-[#101828] outline-none transition placeholder:text-[#98a2b3] focus:border-[#667085] focus:ring-2 focus:ring-[#101828]/10" />
+                      <input required type="number" inputMode="tel" pattern="[0-9+ -]{10,15}" minLength={10} autoComplete="tel" placeholder="+91 98765 43210" className="mt-1.5 h-11 w-full rounded-lg border border-[#d0d5dd] px-3 text-sm font-normal text-[#101828] outline-none transition placeholder:text-[#98a2b3] focus:border-[#667085] focus:ring-2 focus:ring-[#101828]/10" />
                     </label>
                   </div>
                 </div>

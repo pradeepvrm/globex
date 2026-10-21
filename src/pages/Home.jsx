@@ -16,17 +16,19 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <InviteBanner />
-      <HeroSection />
-      <TrendingNow />
-      <DealsOfTheDay />
-      <TrendingOffers />
-      <BrandBanner />
-      <ShopByCategories />
-      <CustomerTestimonials />
-      <FeaturedBlogs />
-      <ServiceBenefits />
-      <AboutUs />
+      <main className="home-page">
+        <InviteBanner />
+        <HeroSection />
+        <TrendingNow />
+        <DealsOfTheDay />
+        <TrendingOffers />
+        <BrandBanner />
+        <ShopByCategories />
+        <CustomerTestimonials />
+        <FeaturedBlogs />
+        <ServiceBenefits />
+        <AboutUs />
+      </main>
       <Footer />
     </>
   );

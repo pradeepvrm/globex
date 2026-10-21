@@ -17,7 +17,7 @@ const categories = [
 
 export default function ShopByCategories() {
   return (
-    <section className="w-full bg-white py-10 sm:py-12">
+    <section className="w-full bg-white pt-10">
       <h2 className="mb-6 px-[clamp(20px,2.6vw,50px)] text-[clamp(22px,1.875vw,36px)] font-bold leading-normal text-[#272727]">
         Shop by Categories
       </h2>
