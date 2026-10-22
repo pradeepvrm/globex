@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import background from "../assets/home/brand-banner.png";
 import forever21Logo from "../assets/home/brand-forever21.svg";
 

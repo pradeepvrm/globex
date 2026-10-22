@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useUser } from "@clerk/react";
-import { Link, useParams } from "react-router";
+import { Link, useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";

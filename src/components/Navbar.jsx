@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { UserButton, useUser } from "@clerk/react";
 import logo from "../assets/logo.png";
 import heart from "../assets/heart.png";

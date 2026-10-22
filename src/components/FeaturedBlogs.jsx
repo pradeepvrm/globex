@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import firstBlogImage from "../assets/home/blog-01.png";
 import secondBlogImage from "../assets/home/blog-02.png";
 

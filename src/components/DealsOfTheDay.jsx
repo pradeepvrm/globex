@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import levisLogo from "../assets/home/levis.svg";
 import denimImage from "../assets/home/deal-denim.png";
 import portraitImage from "../assets/home/deal-portrait.png";

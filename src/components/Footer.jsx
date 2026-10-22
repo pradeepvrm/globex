@@ -3,7 +3,7 @@ import instagram from "../assets/instagram.png";
 import logoFooter from "../assets/logo-footer.png";
 import twitter from "../assets/twitter.png";
 import whatsapp from "../assets/whatsapp.png";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const footerSections = [
   { title: "Women", links: ["All Women", "Skirts", "T-Shirts", "Tops", "Jackets"] },

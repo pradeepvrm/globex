@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import womensPants from "../assets/home/category-womens-pants.png";
 import mensJacket from "../assets/home/category-mens-jacket.png";
 import sweater from "../assets/home/category-sweater.png";

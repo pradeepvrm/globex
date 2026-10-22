@@ -7,7 +7,7 @@ import Home from './pages/Home'
 import Products from './pages/Products'
 import SingleProduct from './pages/SingleProduct'
 import Wishlist from './pages/Wishlist'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { SignInPage, SignUpPage } from './pages/Auth'
 
 function App() {

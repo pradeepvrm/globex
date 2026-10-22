@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import levisLogo from "../assets/home/levis.svg";
 import forever21Logo from "../assets/home/forever21.svg";
 import mainImage from "../assets/home/offer-main.png";

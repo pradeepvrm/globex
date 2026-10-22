@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import useLocalStorage from "../data/useLocalStorage";
 
 const formatPrice = (amount) => `Rs. ${amount.toLocaleString("en-IN")}`;

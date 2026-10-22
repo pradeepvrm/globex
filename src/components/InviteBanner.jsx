@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import closeIcon from "../assets/home/invite-close.svg";
 
 export default function InviteBanner() {

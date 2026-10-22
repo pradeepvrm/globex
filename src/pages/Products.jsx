@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import ProductFilters from "../components/ProductFilters";
 import products from "../data/products.json";
-import { Link, useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router-dom";
 import { useMemo, useState } from "react";
 
 export default function Products() {
