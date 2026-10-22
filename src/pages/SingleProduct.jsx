@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useUser } from "@clerk/react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
@@ -177,6 +177,8 @@ export default function SingleProduct() {
 }
 
 function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const product = products.find((item) => item.id === Number(productId));
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
@@ -238,6 +240,14 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
     setWishlistIds((currentIds) => isFavorite
       ? currentIds.filter((id) => id !== product.id)
       : [...currentIds, product.id]);
+  }
+
+  function buyNow() {
+    const saved = setCartItems([{ ...product, size: selectedSize, quantity: 1 }]);
+
+    if (saved) {
+      navigate("/checkout", { state: { backgroundLocation: location } });
+    }
   }
 
   return (
@@ -339,7 +349,7 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
             <div className="mt-7 flex flex-wrap items-center gap-4">
               <button
                 type="button"
-                onClick={toggleCartItem}
+                onClick={buyNow}
                 className="rounded-md bg-[#002482] px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-[#001b64] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#002482]"
               >
                 Buy Now
