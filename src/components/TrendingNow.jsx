@@ -10,7 +10,7 @@ export default function TrendingNow() {
         </h2>
       </div>
 
-      <ul className="trending-products scrollbar-none flex gap-[clamp(16px,2.08vw,40px)] overflow-x-auto px-[clamp(20px,2.6vw,50px)] pb-2">
+      <ul className="no-scrollbar flex gap-[clamp(16px,2.08vw,40px)] overflow-x-auto px-[clamp(20px,2.6vw,50px)] pb-2">
         {products.slice(0, 12).map((product) => (
           <li key={product.id} className="w-[clamp(250px,21.35vw,410px)] shrink-0">
             <ProductCard {...product} size="trending" />

@@ -13,6 +13,13 @@ const footerSections = [
   { title: "More links", links: ["Blogs", "Gift center", "Buying guides", "New arrivals", "Clearance", "Contact us"] },
 ];
 
+const footerRoutes = {
+  "Your cart": "/cart",
+  "Your orders": "/orders",
+  Wishlist: "/wishlist",
+  "Contact us": "/contact",
+};
+
 const socialIcons = {
   Facebook: facebook,
   Instagram: instagram,
@@ -55,8 +62,8 @@ export default function Footer({
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link}>
-                    {link === "Contact us" ? (
-                      <Link to="/contact" className="text-2xs text-white/90 transition-colors hover:text-white hover:underline sm:text-sm">{link}</Link>
+                    {footerRoutes[link] ? (
+                      <Link to={footerRoutes[link]} className="text-2xs text-white/90 transition-colors hover:text-white hover:underline sm:text-sm">{link}</Link>
                     ) : (
                       <a href="#" className="text-2xs text-white/90 transition-colors hover:text-white hover:underline sm:text-sm">{link}</a>
                     )}

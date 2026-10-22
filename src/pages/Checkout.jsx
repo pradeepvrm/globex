@@ -31,8 +31,9 @@ export default function Checkout({ isModal = false }) {
 
 function CheckoutContent({ isModal, user, storageKey, onClose }) {
   const [savedItems, setItems, storageError] = useLocalStorage(storageKey, []);
+  const [, setOrders] = useLocalStorage(`orders:${user?.id ?? "guest"}`, []);
   const [paymentMethod, setPaymentMethod] = useState("card");
-  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [placedOrder, setPlacedOrder] = useState(null);
   const [submitError, setSubmitError] = useState("");
   const items = Array.isArray(savedItems)
     ? savedItems.filter((item) => item && typeof item.id === "number" && Number.isInteger(item.quantity) && item.quantity > 0)
@@ -62,11 +63,24 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
       setSubmitError("Add an item to your cart before placing an order.");
       return;
     }
-    if (!setItems([])) {
-      setSubmitError("Your order could not be completed because your cart could not be updated.");
+    const order = {
+      id: `GBX-${Date.now().toString(36).toUpperCase()}`,
+      placedAt: new Date().toISOString(),
+      status: "Confirmed",
+      paymentMethod,
+      items: items.map(({ id, name, brand, price, quantity, image, imageAlt, size }) => ({
+        id, name, brand, price, quantity, image, imageAlt, size,
+      })),
+      subtotal,
+      shipping,
+      total,
+    };
+    if (!setOrders((currentOrders) => [order, ...(Array.isArray(currentOrders) ? currentOrders : [])])) {
+      setSubmitError("Your order could not be saved. Please try again.");
       return;
     }
-    setOrderPlaced(true);
+    setItems([]);
+    setPlacedOrder(order);
   }
 
   return (
@@ -107,7 +121,7 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
           </button>
         </header>
 
-        {orderPlaced ? (
+        {placedOrder ? (
           <div className="grid min-h-105 flex-1 place-items-center px-6 py-12 text-center">
             <div className="max-w-sm">
               <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#ecfdf3] text-[#039855]">
@@ -116,9 +130,15 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
                 </svg>
               </div>
               <h2 className="mt-5 text-2xl font-bold text-[#101828]">Order placed!</h2>
-              <button type="button" onClick={onClose} className="mt-7 rounded-lg bg-[#00071b] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#17213a]">
-                Continue shopping
-              </button>
+              <p className="mt-2 text-xs text-[#667085]">Order #{placedOrder.id}</p>
+              <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+                <Link to="/orders" className="rounded-lg bg-[#00071b] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#17213a]">
+                  View my orders
+                </Link>
+                <button type="button" onClick={onClose} className="rounded-lg border border-[#d0d5dd] px-5 py-3 text-sm font-semibold text-[#344054] transition hover:bg-[#f2f4f7]">
+                  Continue shopping
+                </button>
+              </div>
             </div>
           </div>
         ) : (

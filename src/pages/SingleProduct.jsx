@@ -138,7 +138,7 @@ function ProductRail({ title, items }) {
   return (
     <section className="mt-14">
       <h2 className="mb-5 text-2xl font-bold text-[#272727] sm:text-3xl">{title}</h2>
-      <div className="flex gap-5 overflow-x-auto pb-5 sm:gap-10" aria-label={title}>
+      <div className="flex gap-5 overflow-x-auto pb-5 sm:gap-10 no-scrollbar" aria-label={title}>
         {items.map((item) => (
           <div key={item.id} className="w-[clamp(260px,21.35vw,410px)] shrink-0">
             <ProductCard {...item} />
@@ -215,7 +215,7 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
   const similarProducts = [
     { ...product, image: product.gallery?.[0] || product.image },
     ...products.filter((item) => item.id !== product.id),
-  ].slice(0, 5);
+  ].slice(1, 6);
   const alsoLiked = products.filter((item) => item.id !== product.id).slice(4, 9);
   const displayName = product.id === 1 ? "Womens Denim Jacket (Blue)" : product.name;
 
@@ -339,6 +339,13 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
             <div className="mt-7 flex flex-wrap items-center gap-4">
               <button
                 type="button"
+                onClick={toggleCartItem}
+                className="rounded-md bg-[#002482] px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-[#001b64] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#002482]"
+              >
+                Buy Now
+              </button>
+              <button
+                type="button" 
                 onClick={toggleCartItem}
                 className="rounded-md bg-[#002482] px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-[#001b64] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#002482]"
               >

@@ -16,7 +16,6 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="home-page">
         <InviteBanner />
         <HeroSection />
         <TrendingNow />
@@ -28,7 +27,6 @@ export default function Home() {
         <FeaturedBlogs />
         <ServiceBenefits />
         <AboutUs />
-      </main>
       <Footer />
     </>
   );
