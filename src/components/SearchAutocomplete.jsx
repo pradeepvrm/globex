@@ -1,17 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import searchIcon from "../assets/searchIcon.png";
-import products from "../data/products.json";
 
 export default function SearchAutocomplete({ onSearch }) {
   const [search, setSearch] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const normalizedSearch = search.trim().toLowerCase();
-  const suggestions = normalizedSearch
-    ? products
-      .filter((product) => `${product.name} ${product.brand}`.toLowerCase().includes(normalizedSearch))
-      .slice(0, 6)
-    : [];
+
+  useEffect(() => {
+    if (!normalizedSearch) {
+      setSuggestions([]);
+      return undefined;
+    }
+    
+    const timeoutId = setTimeout(async () => {
+        const url = `${import.meta.env.VITE_API_URL}/api/products?search=${normalizedSearch}`;
+        const response = await fetch(url);
+        const products = await response.json();
+        setSuggestions(Array.isArray(products) ? products.slice(0, 5) : []);
+        
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [normalizedSearch]);
 
   function submitSearch(value = search) {
     const query = value.trim();

@@ -1,5 +1,5 @@
-import { useUser } from "@clerk/react";
-import { Link } from "react-router-dom";
+import { useUser, useAuth } from "@clerk/react";
+import { Link, Navigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import useLocalStorage from "../data/useLocalStorage";
@@ -19,6 +19,7 @@ function formatDate(value) {
 
 export default function Orders() {
   const { isLoaded, user } = useUser();
+  const { isSignedIn } = useAuth();
   const userId = user?.id ?? "guest";
 
   if (!isLoaded) {
@@ -31,6 +32,10 @@ export default function Orders() {
         <Footer />
       </>
     );
+  }
+
+  if (!isSignedIn) {
+    return <Navigate to="/sign-in" />;
   }
 
   return <OrdersForUser key={userId} storageKey={`orders:${userId}`} />;

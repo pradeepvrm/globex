@@ -3,12 +3,21 @@ import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
-import products from "../data/products.json";
 import useLocalStorage from "../data/useLocalStorage";
+import { useEffect, useState } from "react";
 
 export default function Wishlist() {
+  const [products, setProducts] = useState([]);
   const { isLoaded, user } = useUser();
   const userId = user?.id ?? "guest";
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    const url = `${import.meta.env.VITE_API_URL}/api/products`;
+    const response = fetch(url);
+    response.then((res) => res.json()).then(setProducts);
+  }, [isLoaded]);
 
   if (!isLoaded) {
     return (
@@ -22,10 +31,10 @@ export default function Wishlist() {
     );
   }
 
-  return <WishlistForUser key={userId} storageKey={`wishlistItems:${userId}`} />;
+  return <WishlistForUser key={userId} storageKey={`wishlistItems:${userId}`} products={products} />;
 }
 
-function WishlistForUser({ storageKey }) {
+function WishlistForUser({ storageKey, products }) {
   const [savedWishlistIds, setWishlistIds, storageError] = useLocalStorage(storageKey, []);
   const wishlistIds = Array.isArray(savedWishlistIds)
     ? savedWishlistIds.filter((id) => Number.isInteger(id))

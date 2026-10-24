@@ -1,7 +1,20 @@
 import ProductCard from "./ProductCard";
-import products from "../data/products.json";
+import { useState, useEffect } from "react";
 
 export default function TrendingNow() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    async function fetchProducts() {
+        const url = `${import.meta.env.VITE_API_URL}/api/products`;
+        const response = await fetch(url);
+        if (!response.ok) return;
+        const data = await response.json();
+        setProducts(data);
+    }
+    fetchProducts();
+  }, []);
+
   return (
     <section className="w-full overflow-hidden bg-white pt-10 ">
       <div className="mb-6 px-[clamp(20px,2.6vw,50px)]">

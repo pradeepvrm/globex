@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/react";
+import { useUser, useAuth } from "@clerk/react";
 import { Link, useNavigate } from "react-router-dom";
 import useLocalStorage from "../data/useLocalStorage";
 
@@ -7,6 +7,7 @@ const formatPrice = (amount) => `Rs. ${amount.toLocaleString("en-IN")}`;
 
 export default function Checkout({ isModal = false }) {
   const { isLoaded, user } = useUser();
+  const { isSignedIn } = useAuth();
   const navigate = useNavigate();
   const userId = user?.id ?? "guest";
 
@@ -16,6 +17,10 @@ export default function Checkout({ isModal = false }) {
         <p className="rounded-2xl bg-white px-6 py-5 text-sm text-[#646464] shadow-2xl">Loading checkout...</p>
       </div>
     );
+  }
+
+  if (!isSignedIn) {
+    return navigate("/sign-in");
   }
 
   return (

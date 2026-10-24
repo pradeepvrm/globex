@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "@clerk/react";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
-import products from "../data/products.json";
 import useLocalStorage from "../data/useLocalStorage";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
@@ -179,7 +178,59 @@ export default function SingleProduct() {
 function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const product = products.find((item) => item.id === Number(productId));
+  const [product, setProduct] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [productLoading, setProductLoading] = useState(true);
+  const [productError, setProductError] = useState(false);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function fetchProducts() {
+      
+      try {
+        const url = `${import.meta.env.VITE_API_URL}/api/products`;
+        const response = await fetch(url, { signal: controller.signal });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (!controller.signal.aborted && Array.isArray(data)) setProducts(data);
+      } catch (error) {
+        if (error.name !== "AbortError") console.error("Failed to load recommended products", error);
+      }
+    }
+
+    fetchProducts();
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function fetchProduct() {
+      setProductLoading(true);
+      setProductError(false);
+
+      try {
+        const url = `${import.meta.env.VITE_API_URL}/api/products/${productId}`;
+        const response = await fetch(url, { signal: controller.signal });
+        if (!response.ok) {
+          throw new Error(`Product request failed with status ${response.status}`);
+        }
+        const data = await response.json();
+        setProduct(data);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setProduct(null);
+          setProductError(true);
+        }
+      } finally {
+        if (!controller.signal.aborted) setProductLoading(false);
+      }
+    }
+
+    fetchProduct();
+    return () => controller.abort();
+  }, [productId]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState(colors[0]);
@@ -189,8 +240,20 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
   const wishlistIds = Array.isArray(savedWishlistIds) ? savedWishlistIds : [];
   const isFavorite = product ? wishlistIds.includes(product.id) : false;
   const inCart = Array.isArray(cartItems)
-    ? cartItems.find((item) => item.id === product.id && item.size === selectedSize)
+    ? product && cartItems.find((item) => item.id === product.id && item.size === selectedSize)
     : false;
+
+  if (productLoading) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex min-h-[55vh] items-center justify-center bg-[#f9faff] text-sm text-[#646464]" aria-live="polite">
+          Loading product...
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   if (!product) {
     return (
@@ -198,7 +261,7 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
         <Navbar />
         <main className="flex min-h-[55vh] flex-col items-center justify-center bg-[#f9faff] px-4 text-center">
           <h1 className="text-2xl font-bold text-[#272727]">Product not found</h1>
-          <p className="mt-2 text-sm text-[#646464]">The product you are looking for may have been removed.</p>
+          <p className="mt-2 text-sm text-[#646464]">{productError ? "We couldn't load this product. Please try again later." : "The product you are looking for may have been removed."}</p>
           <Link to="/products" className="mt-5 rounded-md bg-[#00071b] px-5 py-3 text-sm font-bold text-white hover:bg-[#17213a]">
             Browse products
           </Link>
@@ -214,11 +277,9 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
   const discount = product.originalPrice > product.price
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
-  const similarProducts = [
-    { ...product, image: product.gallery?.[0] || product.image },
-    ...products.filter((item) => item.id !== product.id),
-  ].slice(1, 6);
-  const alsoLiked = products.filter((item) => item.id !== product.id).slice(4, 9);
+  const otherProducts = products.filter((item) => item.id !== product.id);
+  const similarProducts = otherProducts.slice(0, 5);
+  const alsoLiked = otherProducts.slice(5, 10);
   const displayName = product.id === 1 ? "Womens Denim Jacket (Blue)" : product.name;
 
   function toggleCartItem() {
@@ -353,7 +414,7 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
                 className="rounded-md bg-[#002482] px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-[#001b64] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#002482]"
               >
                 Buy Now
-              </button>
+              </button> 
               <button
                 type="button" 
                 onClick={toggleCartItem}

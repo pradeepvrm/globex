@@ -2,22 +2,33 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import ProductFilters from "../components/ProductFilters";
-import products from "../data/products.json";
 import { Link, useSearchParams } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+
 
 export default function Products() {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search")?.trim().toLowerCase() ?? "";
   const category = searchParams.get("category")?.trim().toLowerCase() ?? "";
+  const [products, setProducts] = useState([]);
 
-  return <ProductListing key={category} category={category} searchQuery={searchQuery} />;
+  useEffect(() => {
+    const url = `${import.meta.env.VITE_API_URL}/api/products`;
+    async function fetchProducts() {
+      const response = await fetch(url);
+      const data = await response.json();
+      setProducts(data);
+    }
+    fetchProducts();
+  }, []);
+
+  return <ProductListing key={`${category}-${products.length}`} category={category} searchQuery={searchQuery} products={products} />;
 }
 
-function ProductListing({ category, searchQuery }) {
+function ProductListing({ category, searchQuery, products }) {
   const categoryProducts = useMemo(
     () => category ? products.filter((product) => product.category === category) : products,
-    [category],
+    [category, products],
   );
   const priceBounds = useMemo(() => {
     const prices = categoryProducts.map((product) => product.price);
