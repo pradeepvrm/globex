@@ -2,7 +2,7 @@ import { useUser, useAuth } from "@clerk/react";
 import { Link, Navigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import useLocalStorage from "../data/useLocalStorage";
+import { useEffect, useState } from "react";
 
 const formatPrice = (amount) => `Rs. ${Number(amount || 0).toLocaleString("en-IN")}`;
 
@@ -38,14 +38,29 @@ export default function Orders() {
     return <Navigate to="/sign-in" />;
   }
 
-  return <OrdersForUser key={userId} storageKey={`orders:${userId}`} />;
+  return <OrdersForUser userId={userId} />;
 }
 
-function OrdersForUser({ storageKey }) {
-  const [savedOrders, , storageError] = useLocalStorage(storageKey, []);
-  const orders = Array.isArray(savedOrders)
-    ? savedOrders.filter((order) => order && typeof order.id === "string" && Array.isArray(order.items))
-    : [];
+function OrdersForUser({ userId }) {
+
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const url = `${import.meta.env.VITE_API_URL}/api/orders/${userId}`;
+    
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) return;
+        const data = await response.json();
+        setOrders(data);
+      } catch (error) {
+        console.error("Failed to load orders", error);
+      }
+    };
+
+    fetchOrders();
+  }, [userId]);
 
   return (
     <>
@@ -63,8 +78,6 @@ function OrdersForUser({ storageKey }) {
               Continue shopping
             </Link>
           </div>
-
-          {storageError && <p role="alert" className="mb-5 text-sm text-[#b42318]">{storageError}</p>}
 
           {orders.length ? (
             <ul className="space-y-5">

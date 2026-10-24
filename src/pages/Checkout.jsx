@@ -70,8 +70,8 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
     }
     const order = {
       id: `GBX-${Date.now().toString(36).toUpperCase()}`,
+      userId: user.id,
       placedAt: new Date().toISOString(),
-      status: "Confirmed",
       paymentMethod,
       items: items.map(({ id, name, brand, price, quantity, image, imageAlt, size }) => ({
         id, name, brand, price, quantity, image, imageAlt, size,
@@ -80,6 +80,13 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
       shipping,
       total,
     };
+
+    const url = `${import.meta.env.VITE_API_URL}/api/orders`;
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order),
+    }).catch(() => {});
     if (!setOrders((currentOrders) => [order, ...(Array.isArray(currentOrders) ? currentOrders : [])])) {
       setSubmitError("Your order could not be saved. Please try again.");
       return;
