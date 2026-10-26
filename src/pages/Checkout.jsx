@@ -36,10 +36,10 @@ export default function Checkout({ isModal = false }) {
 
 function CheckoutContent({ isModal, user, storageKey, onClose }) {
   const [savedItems, setItems, storageError] = useLocalStorage(storageKey, []);
-  const [, setOrders] = useLocalStorage(`orders:${user?.id ?? "guest"}`, []);
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [placedOrder, setPlacedOrder] = useState(null);
   const [submitError, setSubmitError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const items = Array.isArray(savedItems)
     ? savedItems.filter((item) => item && typeof item.id === "number" && Number.isInteger(item.quantity) && item.quantity > 0)
     : [];
@@ -61,7 +61,7 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
     };
   }, [onClose]);
 
-  function placeOrder(event) {
+  async function placeOrder(event) {
     event.preventDefault();
     setSubmitError("");
     if (items.length === 0) {
@@ -81,18 +81,24 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
       total,
     };
 
-    const url = `${import.meta.env.VITE_API_URL}/api/orders`;
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(order),
-    }).catch(() => {});
-    if (!setOrders((currentOrders) => [order, ...(Array.isArray(currentOrders) ? currentOrders : [])])) {
-      setSubmitError("Your order could not be saved. Please try again.");
-      return;
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
+      });
+      const savedOrder = await response.json();
+      if (!response.ok) {
+        throw new Error(savedOrder.error || "Your order could not be saved. Please try again.");
+      }
+      setItems([]);
+      setPlacedOrder(savedOrder);
+    } catch (error) {
+      setSubmitError(error.message || "Could not connect to the order service. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-    setItems([]);
-    setPlacedOrder(order);
   }
 
   return (
@@ -234,8 +240,8 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
               {submitError && <p role="alert" className="mt-4 text-xs text-[#b42318]">{submitError}</p>}
               {storageError && <p role="alert" className="mt-2 text-xs text-[#b42318]">{storageError}</p>}
 
-              <button type="submit" disabled={itemCount === 0} className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#00071b] px-4 text-sm font-semibold text-white transition hover:bg-[#17213a] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#00071b] disabled:cursor-not-allowed disabled:bg-[#a5a9b1]">
-                Place order · {formatPrice(total)}
+              <button type="submit" disabled={itemCount === 0 || isSubmitting} className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#00071b] px-4 text-sm font-semibold text-white transition hover:bg-[#17213a] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#00071b] disabled:cursor-not-allowed disabled:bg-[#a5a9b1]">
+                {isSubmitting ? "Saving order..." : `Place order · ${formatPrice(total)}`}
                 <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
                   <path d="M3.5 10h13m-5-5 5 5-5 5" />
                 </svg>

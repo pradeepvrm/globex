@@ -42,24 +42,33 @@ export default function Orders() {
 }
 
 function OrdersForUser({ userId }) {
-
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     const url = `${import.meta.env.VITE_API_URL}/api/orders/${userId}`;
-    
+    const controller = new AbortController();
+
     const fetchOrders = async () => {
+      setLoadError("");
       try {
-        const response = await fetch(url);
-        if (!response.ok) return;
+        const response = await fetch(url, { signal: controller.signal });
+        if (!response.ok) throw new Error("Could not load your orders. Please try again.");
         const data = await response.json();
         setOrders(data);
       } catch (error) {
-        console.error("Failed to load orders", error);
+        if (error.name !== "AbortError") {
+          console.error("Failed to load orders", error);
+          setLoadError(error.message || "Could not connect to the order service.");
+        }
+      } finally {
+        if (!controller.signal.aborted) setIsLoading(false);
       }
     };
 
     fetchOrders();
+    return () => controller.abort();
   }, [userId]);
 
   return (
@@ -79,7 +88,13 @@ function OrdersForUser({ userId }) {
             </Link>
           </div>
 
-          {orders.length ? (
+          {isLoading ? (
+            <p className="py-12 text-center text-sm text-[#646464]">Loading orders...</p>
+          ) : loadError ? (
+            <p role="alert" className="rounded-xl border border-[#fecdca] bg-white px-5 py-8 text-center text-sm text-[#b42318]">
+              {loadError}
+            </p>
+          ) : orders.length ? (
             <ul className="space-y-5">
               {orders.map((order) => (
                 <OrderCard key={order.id} order={order} />
