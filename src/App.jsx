@@ -1,4 +1,5 @@
 
+import Admin from './pages/Admin'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import Contact from './pages/Contact'
@@ -7,6 +8,7 @@ import Orders from './pages/Orders'
 import Products from './pages/Products'
 import SingleProduct from './pages/SingleProduct'
 import Wishlist from './pages/Wishlist'
+import AdminRoute from './components/AdminRoute'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { SignInPage, SignUpPage } from './pages/Auth'
 import { useEffect } from 'react'
@@ -37,6 +39,7 @@ function AppRoutes() {
         <Route path="/products/:productId" element={<SingleProduct />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/contact" element={<Contact />} />
