@@ -4,6 +4,7 @@ import ProductCard from "../components/ProductCard";
 import ProductFilters from "../components/ProductFilters";
 import { Link, useSearchParams } from "react-router-dom";
 import { useMemo, useState, useEffect } from "react";
+import { fetchApi } from "../data/api";
 
 
 export default function Products() {
@@ -15,9 +16,12 @@ export default function Products() {
   useEffect(() => {
     const url = `${import.meta.env.VITE_API_URL}/api/products`;
     async function fetchProducts() {
-      const response = await fetch(url);
-      const data = await response.json();
-      setProducts(data);
+      try {
+        const data = await fetchApi(url);
+        setProducts(data);
+      } catch (error) {
+        console.error("Failed to load products", error);
+      }
     }
     fetchProducts();
   }, []);

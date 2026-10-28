@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import useLocalStorage from "../data/useLocalStorage";
+import { fetchApi } from "../data/api";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
 const colors = ["Blue", "Black", "White"];
@@ -47,9 +48,10 @@ function ProductInformation({ product }) {
       <section>
         <h2 className="text-lg font-bold">Product Details</h2>
         <p className="mt-2 text-sm leading-6 text-[#646464]">
-          {product.id === 1
-            ? "Blue washed jacket, has a spread collar, 4 pockets, button closure, long sleeves, straight hem."
-            : `${product.name} by ${product.brand}, made for comfortable everyday wear with a timeless, easy-to-style finish.`}
+          {product.description
+            || (product.id === 1
+              ? "Blue washed jacket, has a spread collar, 4 pockets, button closure, long sleeves, straight hem."
+              : `${product.name} by ${product.brand}, made for comfortable everyday wear with a timeless, easy-to-style finish.`)}
         </p>
       </section>
       <section>
@@ -190,9 +192,7 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
       
       try {
         const url = `${import.meta.env.VITE_API_URL}/api/products`;
-        const response = await fetch(url, { signal: controller.signal });
-        if (!response.ok) return;
-        const data = await response.json();
+        const data = await fetchApi(url, { signal: controller.signal });
         if (!controller.signal.aborted && Array.isArray(data)) setProducts(data);
       } catch (error) {
         if (error.name !== "AbortError") console.error("Failed to load recommended products", error);
@@ -212,11 +212,7 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
 
       try {
         const url = `${import.meta.env.VITE_API_URL}/api/products/${productId}`;
-        const response = await fetch(url, { signal: controller.signal });
-        if (!response.ok) {
-          throw new Error(`Product request failed with status ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await fetchApi(url, { signal: controller.signal });
         setProduct(data);
       } catch (error) {
         if (error.name !== "AbortError") {

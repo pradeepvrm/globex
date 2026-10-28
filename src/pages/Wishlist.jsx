@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import useLocalStorage from "../data/useLocalStorage";
 import { useEffect, useState } from "react";
+import { fetchApi } from "../data/api";
 
 export default function Wishlist() {
   const [products, setProducts] = useState([]);
@@ -15,8 +16,9 @@ export default function Wishlist() {
     if (!isLoaded) return;
 
     const url = `${import.meta.env.VITE_API_URL}/api/products`;
-    const response = fetch(url);
-    response.then((res) => res.json()).then(setProducts);
+    fetchApi(url).then(setProducts).catch((error) => {
+      console.error("Failed to load wishlist products", error);
+    });
   }, [isLoaded]);
 
   if (!isLoaded) {

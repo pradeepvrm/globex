@@ -3,6 +3,7 @@ import { Link, Navigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
+import { fetchApi } from "../data/api";
 
 const formatPrice = (amount) => `Rs. ${Number(amount || 0).toLocaleString("en-IN")}`;
 
@@ -53,9 +54,7 @@ function OrdersForUser({ userId }) {
     const fetchOrders = async () => {
       setLoadError("");
       try {
-        const response = await fetch(url, { signal: controller.signal });
-        if (!response.ok) throw new Error("Could not load your orders. Please try again.");
-        const data = await response.json();
+        const data = await fetchApi(url, { signal: controller.signal });
         setOrders(data);
       } catch (error) {
         if (error.name !== "AbortError") {

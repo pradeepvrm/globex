@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import searchIcon from "../assets/searchIcon.png";
+import { fetchApi } from "../data/api";
 
 export default function SearchAutocomplete({ onSearch }) {
   const [search, setSearch] = useState("");
@@ -15,11 +16,14 @@ export default function SearchAutocomplete({ onSearch }) {
     }
     
     const timeoutId = setTimeout(async () => {
-        const url = `${import.meta.env.VITE_API_URL}/api/products?search=${normalizedSearch}`;
-        const response = await fetch(url);
-        const products = await response.json();
+      try {
+        const url = `${import.meta.env.VITE_API_URL}/api/products?search=${encodeURIComponent(normalizedSearch)}`;
+        const products = await fetchApi(url);
         setSuggestions(Array.isArray(products) ? products.slice(0, 5) : []);
-        
+      } catch (error) {
+        console.error("Failed to load product search suggestions", error);
+        setSuggestions([]);
+      }
     }, 100);
 
     return () => {

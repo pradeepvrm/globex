@@ -1,6 +1,7 @@
 import { useAuth } from "@clerk/react";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import AdminProducts from "./AdminProducts";
 
 const STATUSES = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
 
@@ -18,6 +19,7 @@ export default function Admin() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [savingId, setSavingId] = useState("");
+  const [view, setView] = useState("orders");
 
   useEffect(() => {
     let cancelled = false;
@@ -32,11 +34,11 @@ export default function Admin() {
 
         if (!response.ok) {
           const body = await response.json().catch(() => ({}));
-          throw new Error(body.error || "Could not load orders.");
+          throw new Error(body.msg || "Could not load orders.");
         }
 
         const data = await response.json();
-        if (!cancelled) setOrders(data);
+        if (!cancelled) setOrders(data.data);
       } catch (loadError) {
         if (!cancelled) setError(loadError.message || "Could not connect to the API.");
       } finally {
@@ -70,7 +72,7 @@ export default function Admin() {
 
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
-        throw new Error(body.error || "Could not update the order status.");
+        throw new Error(body.msg || "Could not update the order status.");
       }
 
       setOrders((current) =>
@@ -90,13 +92,35 @@ export default function Admin() {
       <Navbar />
       <main className="min-h-[55vh] bg-[#f9faff]">
         <section className="mx-auto w-full max-w-300 px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-          <div className="mb-7">
-            <h1 className="text-2xl font-bold text-blue-950 sm:text-3xl">Welcome, Admin</h1>
-            <p className="mt-2 text-sm text-[#646464]">
-              {orders.length} {orders.length === 1 ? "order" : "orders"} · {formatPrice(revenue)} total
-            </p>
+          <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-bold text-blue-950 sm:text-3xl">Welcome, Admin</h1>
+              <p className="mt-2 text-sm text-[#646464]">
+                {view === "orders"
+                  ? `${orders.length} ${orders.length === 1 ? "order" : "orders"} · ${formatPrice(revenue)} total`
+                  : "Manage the product catalog"}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setView("orders")}
+                className={`rounded-md px-4 py-2 text-xs font-bold ${view === "orders" ? "bg-[#00071b] text-white" : "border border-[#d0d5dd] text-[#272727]"}`}
+              >
+                Orders
+              </button>
+              <button
+                type="button"
+                onClick={() => setView("products")}
+                className={`rounded-md px-4 py-2 text-xs font-bold ${view === "products" ? "bg-[#00071b] text-white" : "border border-[#d0d5dd] text-[#272727]"}`}
+              >
+                Products
+              </button>
+            </div>
           </div>
 
+          {view === "orders" ? (
+            <>
           {error && (
             <p role="alert" className="mb-5 rounded-xl border border-[#fecdca] bg-white px-5 py-4 text-sm text-[#b42318]">
               {error}
@@ -151,6 +175,10 @@ export default function Admin() {
                 </tbody>
               </table>
             </div>
+          )}
+            </>
+          ) : (
+            <AdminProducts />
           )}
         </section>
       </main>

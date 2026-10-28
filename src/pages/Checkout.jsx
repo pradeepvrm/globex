@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useUser, useAuth } from "@clerk/react";
 import { Link, useNavigate } from "react-router-dom";
 import useLocalStorage from "../data/useLocalStorage";
+import { fetchApi } from "../data/api";
 
 const formatPrice = (amount) => `Rs. ${amount.toLocaleString("en-IN")}`;
 
@@ -83,15 +84,11 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+      const savedOrder = await fetchApi(`${import.meta.env.VITE_API_URL}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order),
       });
-      const savedOrder = await response.json();
-      if (!response.ok) {
-        throw new Error(savedOrder.error || "Your order could not be saved. Please try again.");
-      }
       setItems([]);
       setPlacedOrder(savedOrder);
     } catch (error) {

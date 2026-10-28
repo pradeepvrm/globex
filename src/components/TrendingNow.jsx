@@ -1,16 +1,19 @@
 import ProductCard from "./ProductCard";
 import { useState, useEffect } from "react";
+import { fetchApi } from "../data/api";
 
 export default function TrendingNow() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     async function fetchProducts() {
+      try {
         const url = `${import.meta.env.VITE_API_URL}/api/products`;
-        const response = await fetch(url);
-        if (!response.ok) return;
-        const data = await response.json();
+        const data = await fetchApi(url);
         setProducts(data);
+      } catch (error) {
+        console.error("Failed to load trending products", error);
+      }
     }
     fetchProducts();
   }, []);
