@@ -38,8 +38,10 @@ export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deleteError, setDeleteError] = useState("");
   const [formError, setFormError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
@@ -149,6 +151,34 @@ export default function AdminProducts() {
     }
   };
 
+  const handleDelete = async (product) => {
+
+    setDeletingId(product.id);
+    setDeleteError("");
+
+    try {
+      const token = await getToken();
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/admin/products/${product.id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      const body = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(body.msg || "Could not delete the product.");
+      }
+
+      setProducts((current) => current.filter((item) => item.id !== product.id));
+    } catch (deleteError) {
+      setDeleteError(deleteError.message || "Could not delete the product.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <div>
       <div className="mb-4 flex items-center justify-between gap-3">
@@ -167,6 +197,11 @@ export default function AdminProducts() {
       {error && (
         <p role="alert" className="mb-5 rounded-xl border border-[#fecdca] bg-white px-5 py-4 text-sm text-[#b42318]">
           {error}
+        </p>
+      )}
+      {deleteError && (
+        <p role="alert" className="mb-5 rounded-xl border border-[#fecdca] bg-white px-5 py-4 text-sm text-[#b42318]">
+          {deleteError}
         </p>
       )}
 
@@ -280,9 +315,19 @@ export default function AdminProducts() {
                   <td className="px-4 py-3 text-[#646464]">{formatPrice(product.originalPrice)}</td>
                   <td className="px-4 py-3 text-[#646464]">{product.rating ?? "—"}</td>
                   <td className="px-4 py-3">
-                    <button type="button" onClick={() => openEditForm(product)} className="text-xs font-bold text-blue-950 underline underline-offset-4 hover:text-[#646464]">
-                      Edit
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <button type="button" onClick={() => openEditForm(product)} className="text-xs font-bold text-blue-950 underline underline-offset-2 hover:text-[#646464]">
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(product)}
+                        disabled={deletingId !== null}
+                        className="text-xs font-bold text-[#b42318] underline underline-offset-2 hover:text-[#7a271a] disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {deletingId === product.id ? "Deleting..." : "Delete"}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
