@@ -52,17 +52,14 @@ function AuthPage({ mode }) {
         throw new Error(result.msg || "The request could not be completed.");
       }
 
-      if (!isSignUp) {
-        if (!result.data?.token) {
-          throw new Error("Login succeeded, but the server did not return an authentication token.");
-        }
-        login(result.data.token);
-        navigate("/orders", { replace: true });
+      if (!result.data?.token) {
+        throw new Error(
+          `${isSignUp ? "Registration" : "Login"} succeeded, but the server did not return an authentication token.`,
+        );
       }
 
-      if (isSignUp) {
-        setFormData({ username: "", email: "", password: "" });
-      }
+      login(result.data.token);
+      navigate("/", { replace: true });
     } catch (error) {
       setFeedback({
         type: "error",

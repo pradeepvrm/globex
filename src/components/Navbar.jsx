@@ -3,6 +3,7 @@ import { useAuth } from "../auth/AuthContext";
 import logo from "../assets/logo.png";
 import heart from "../assets/heart.png";
 import cart from "../assets/cart.png";
+import login from "../assets/login.png"
 import useLocalStorage from "../data/useLocalStorage";
 import SearchAutocomplete from "./SearchAutocomplete";
 
@@ -88,7 +89,7 @@ function NavbarContent({ isSignedIn, username, onSignOut, cartStorageKey }) {
             <div className="flex items-center gap-3 text-sm">
               <span className="max-w-28 truncate text-[#646464]">{username}</span>
               <button type="button" onClick={onSignOut} className="text-[#646464] transition-colors hover:text-black">
-                Sign out
+                <img className="max-w-5 cursor-pointer" src={login} />
               </button>
             </div>
           ) : (
