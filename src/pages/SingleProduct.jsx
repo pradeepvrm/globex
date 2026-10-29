@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/react";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
@@ -152,20 +152,8 @@ function ProductRail({ title, items }) {
 
 export default function SingleProduct() {
   const { productId } = useParams();
-  const { isLoaded, user } = useUser();
+  const { user } = useAuth();
   const userId = user?.id ?? "guest";
-
-  if (!isLoaded) {
-    return (
-      <>
-        <Navbar />
-        <main className="flex min-h-[55vh] items-center justify-center bg-[#f9faff] text-sm text-[#646464]">
-          Loading product...
-        </main>
-        <Footer />
-      </>
-    );
-  }
 
   return (
     <SingleProductView

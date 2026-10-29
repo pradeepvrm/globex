@@ -1,28 +1,16 @@
-import { useUser } from "@clerk/react";
 import { Navigate } from "react-router-dom";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import { useAuth } from "../auth/AuthContext";
 
 export default function AdminRoute({ children }) {
-  const { isLoaded, isSignedIn, user } = useUser();
-
-  if (!isLoaded) {
-    return (
-      <>
-        <Navbar />
-        <main className="min-h-[55vh] bg-[#f9faff] px-4 py-12 text-center text-sm text-[#646464]">
-          Loading admin panel...
-        </main>
-        <Footer />
-      </>
-    );
-  }
+  const { isSignedIn, user } = useAuth();
 
   if (!isSignedIn) {
     return <Navigate to="/sign-in" replace />;
   }
 
-  if (user?.publicMetadata?.role !== "admin") {
+  if (user?.role !== "admin") {
     return (
       <>
         <Navbar />

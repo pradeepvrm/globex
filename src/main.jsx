@@ -1,13 +1,11 @@
 
 import { createRoot } from 'react-dom/client'
-import { ClerkProvider } from '@clerk/react'
 import './index.css'
 import App from './App.jsx'
-
-const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+import { AuthProvider } from './auth/AuthContext.jsx'
 
 createRoot(document.getElementById('root')).render(
-    <ClerkProvider publishableKey={clerkPublishableKey}>
-      <App />
-    </ClerkProvider>
+  <AuthProvider>
+    <App />
+  </AuthProvider>
 )

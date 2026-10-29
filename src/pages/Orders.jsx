@@ -1,9 +1,9 @@
-import { useUser, useAuth } from "@clerk/react";
 import { Link, Navigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import { fetchApi } from "../data/api";
+import { useAuth } from "../auth/AuthContext";
 
 const formatPrice = (amount) => `Rs. ${Number(amount || 0).toLocaleString("en-IN")}`;
 
@@ -19,21 +19,8 @@ function formatDate(value) {
 }
 
 export default function Orders() {
-  const { isLoaded, user } = useUser();
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, user } = useAuth();
   const userId = user?.id ?? "guest";
-
-  if (!isLoaded) {
-    return (
-      <>
-        <Navbar />
-        <main className="min-h-[55vh] bg-[#f9faff] px-4 py-12 text-center text-sm text-[#646464]">
-          Loading orders...
-        </main>
-        <Footer />
-      </>
-    );
-  }
 
   if (!isSignedIn) {
     return <Navigate to="/sign-in" />;

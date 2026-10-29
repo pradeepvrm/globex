@@ -1,27 +1,18 @@
 import { useEffect, useState } from "react";
-import { useUser, useAuth } from "@clerk/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import useLocalStorage from "../data/useLocalStorage";
 import { fetchApi } from "../data/api";
+import { useAuth } from "../auth/AuthContext";
 
 const formatPrice = (amount) => `Rs. ${amount.toLocaleString("en-IN")}`;
 
 export default function Checkout({ isModal = false }) {
-  const { isLoaded, user } = useUser();
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, user } = useAuth();
   const navigate = useNavigate();
   const userId = user?.id ?? "guest";
 
-  if (!isLoaded) {
-    return (
-      <div className="fixed inset-0 z-100 grid place-items-center bg-[#101828]/35 p-4 backdrop-blur-sm">
-        <p className="rounded-2xl bg-white px-6 py-5 text-sm text-[#646464] shadow-2xl">Loading checkout...</p>
-      </div>
-    );
-  }
-
   if (!isSignedIn) {
-    return navigate("/sign-in");
+    return <Navigate to="/sign-in" replace />;
   }
 
   return (
@@ -177,11 +168,11 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
                 <div className="grid gap-3 sm:grid-cols-2">
                   <label className="text-xs font-medium text-[#344054]">
                     Full name
-                    <input required autoComplete="name" defaultValue={user?.fullName || ""} placeholder="Your full name" className="mt-1.5 h-11 w-full rounded-lg border border-[#d0d5dd] px-3 text-sm font-normal text-[#101828] outline-none transition placeholder:text-[#98a2b3] focus:border-[#667085] focus:ring-2 focus:ring-[#101828]/10" />
+                    <input required autoComplete="name" defaultValue={user?.username || ""} placeholder="Your full name" className="mt-1.5 h-11 w-full rounded-lg border border-[#d0d5dd] px-3 text-sm font-normal text-[#101828] outline-none transition placeholder:text-[#98a2b3] focus:border-[#667085] focus:ring-2 focus:ring-[#101828]/10" />
                   </label>
                   <label className="text-xs font-medium text-[#344054]">
                     Email address
-                    <input required type="email" autoComplete="email" defaultValue={user.primaryEmailAddress?.emailAddress || ""} placeholder="you@example.com" className="mt-1.5 h-11 w-full rounded-lg border border-[#d0d5dd] px-3 text-sm font-normal text-[#101828] outline-none transition placeholder:text-[#98a2b3] focus:border-[#667085] focus:ring-2 focus:ring-[#101828]/10" />
+                    <input required type="email" autoComplete="email" defaultValue={user?.email || ""} placeholder="you@example.com" className="mt-1.5 h-11 w-full rounded-lg border border-[#d0d5dd] px-3 text-sm font-normal text-[#101828] outline-none transition placeholder:text-[#98a2b3] focus:border-[#667085] focus:ring-2 focus:ring-[#101828]/10" />
                   </label>
                 </div>
               </section>

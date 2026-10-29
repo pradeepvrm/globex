@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { UserButton, useUser } from "@clerk/react";
+import { useAuth } from "../auth/AuthContext";
 import logo from "../assets/logo.png";
 import heart from "../assets/heart.png";
 import cart from "../assets/cart.png";
@@ -7,20 +7,21 @@ import useLocalStorage from "../data/useLocalStorage";
 import SearchAutocomplete from "./SearchAutocomplete";
 
 export default function Navbar() {
-  const { isLoaded, isSignedIn, user } = useUser();
+  const { isSignedIn, user, logout } = useAuth();
   const userId = user?.id ?? "guest";
 
   return (
     <NavbarContent
       key={userId}
-      isLoaded={isLoaded}
       isSignedIn={isSignedIn}
+      username={user?.username}
+      onSignOut={logout}
       cartStorageKey={`cartItems:${userId}`}
     />
   );
 }
 
-function NavbarContent({ isLoaded, isSignedIn, cartStorageKey }) {
+function NavbarContent({ isSignedIn, username, onSignOut, cartStorageKey }) {
   const navigate = useNavigate();
   const [cartItems] = useLocalStorage(cartStorageKey, []);
   const displayedCartCount = Array.isArray(cartItems)
@@ -75,7 +76,7 @@ function NavbarContent({ isLoaded, isSignedIn, cartStorageKey }) {
               className="relative flex h-8 w-8 items-center justify-center"
             >
               <img src={cart} alt="" className="h-5 w-5" />
-              {isLoaded && displayedCartCount > 0 && (
+              {displayedCartCount > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-black px-1 text-[10px] text-white">
                   {displayedCartCount}
                 </span>
@@ -83,9 +84,12 @@ function NavbarContent({ isLoaded, isSignedIn, cartStorageKey }) {
             </button>
           </Link>
           
-          {isLoaded && (isSignedIn ? (
-            <div className="rounded-full border border-white/10 bg-white/50 p-1.5 shadow-sm shadow-slate-950/20">
-              <UserButton showName />
+          {isSignedIn ? (
+            <div className="flex items-center gap-3 text-sm">
+              <span className="max-w-28 truncate text-[#646464]">{username}</span>
+              <button type="button" onClick={onSignOut} className="text-[#646464] transition-colors hover:text-black">
+                Sign out
+              </button>
             </div>
           ) : (
             <Link
@@ -94,7 +98,7 @@ function NavbarContent({ isLoaded, isSignedIn, cartStorageKey }) {
             >
               Sign in
             </Link>
-          ))}
+          )}
         </div>
       </nav>
     </header>

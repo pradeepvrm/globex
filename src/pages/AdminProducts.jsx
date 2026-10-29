@@ -1,5 +1,5 @@
-import { useAuth } from "@clerk/react";
 import { useEffect, useState } from "react";
+import { useAuth } from "../auth/AuthContext";
 
 const CATEGORIES = ["men", "women", "kids"];
 
@@ -34,7 +34,7 @@ function productToForm(product) {
 }
 
 export default function AdminProducts() {
-  const { getToken } = useAuth();
+  const { token } = useAuth();
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -52,7 +52,6 @@ export default function AdminProducts() {
     const loadProducts = async () => {
       try {
         setError("");
-        const token = await getToken();
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -75,7 +74,7 @@ export default function AdminProducts() {
     return () => {
       cancelled = true;
     };
-  }, [getToken]);
+  }, [token]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -117,7 +116,6 @@ export default function AdminProducts() {
     };
 
     try {
-      const token = await getToken();
       const response = await fetch(
         editingId
           ? `${import.meta.env.VITE_API_URL}/api/admin/products/${editingId}`
@@ -157,7 +155,6 @@ export default function AdminProducts() {
     setDeleteError("");
 
     try {
-      const token = await getToken();
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/admin/products/${product.id}`,
         {

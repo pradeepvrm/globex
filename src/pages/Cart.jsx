@@ -1,25 +1,13 @@
-import { useUser } from "@clerk/react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import OrderSummary from "../components/OrderSummary";
 import useLocalStorage from "../data/useLocalStorage";
+import { useAuth } from "../auth/AuthContext";
 
 export default function Cart() {
-  const { isLoaded, user } = useUser();
+  const { user } = useAuth();
   const userId = user?.id ?? "guest";
-
-  if (!isLoaded) {
-    return (
-      <>
-        <Navbar />
-        <main className="min-h-screen bg-[#f9faff] px-4 py-12 text-center text-sm text-[#646464]">
-          Loading cart...
-        </main>
-        <Footer />
-      </>
-    );
-  }
 
   return <CartForUser key={userId} storageKey={`cartItems:${userId}`} />;
 }

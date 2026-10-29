@@ -1,7 +1,7 @@
-import { useAuth } from "@clerk/react";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import AdminProducts from "./AdminProducts";
+import { useAuth } from "../auth/AuthContext";
 
 const STATUSES = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
 
@@ -14,7 +14,7 @@ function formatDate(value) {
 }
 
 export default function Admin() {
-  const { getToken } = useAuth();
+  const { token } = useAuth();
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -27,7 +27,6 @@ export default function Admin() {
     const loadOrders = async () => {
       try {
         setError("");
-        const token = await getToken();
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -50,14 +49,13 @@ export default function Admin() {
     return () => {
       cancelled = true;
     };
-  }, [getToken]);
+  }, [token]);
 
   const handleStatusChange = async (orderNumber, status) => {
     setSavingId(orderNumber);
     setError("");
 
     try {
-      const token = await getToken();
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/admin/orders/${orderNumber}/status`,
         {

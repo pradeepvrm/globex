@@ -1,4 +1,3 @@
-import { useUser } from "@clerk/react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -6,32 +5,19 @@ import ProductCard from "../components/ProductCard";
 import useLocalStorage from "../data/useLocalStorage";
 import { useEffect, useState } from "react";
 import { fetchApi } from "../data/api";
+import { useAuth } from "../auth/AuthContext";
 
 export default function Wishlist() {
   const [products, setProducts] = useState([]);
-  const { isLoaded, user } = useUser();
+  const { user } = useAuth();
   const userId = user?.id ?? "guest";
 
   useEffect(() => {
-    if (!isLoaded) return;
-
     const url = `${import.meta.env.VITE_API_URL}/api/products`;
     fetchApi(url).then(setProducts).catch((error) => {
       console.error("Failed to load wishlist products", error);
     });
-  }, [isLoaded]);
-
-  if (!isLoaded) {
-    return (
-      <>
-        <Navbar />
-        <main className="min-h-[55vh] bg-[#f9faff] px-4 py-12 text-center text-sm text-[#646464]">
-          Loading wishlist...
-        </main>
-        <Footer />
-      </>
-    );
-  }
+  }, []);
 
   return <WishlistForUser key={userId} storageKey={`wishlistItems:${userId}`} products={products} />;
 }

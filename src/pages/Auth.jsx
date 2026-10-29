@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { useAuth } from "../auth/AuthContext";
 
 const apiBaseUrl = import.meta.env.DEV
   ? ""
@@ -8,6 +9,8 @@ const apiBaseUrl = import.meta.env.DEV
 
 function AuthPage({ mode }) {
   const isSignUp = mode === "sign-up";
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -49,12 +52,13 @@ function AuthPage({ mode }) {
         throw new Error(result.msg || "The request could not be completed.");
       }
 
-      setFeedback({
-        type: "success",
-        message: isSignUp
-          ? `Account created for ${result.data.username}. You can now sign in.`
-          : `Login successful. Welcome, ${result.data.username}!`,
-      });
+      if (!isSignUp) {
+        if (!result.data?.token) {
+          throw new Error("Login succeeded, but the server did not return an authentication token.");
+        }
+        login(result.data.token);
+        navigate("/orders", { replace: true });
+      }
 
       if (isSignUp) {
         setFormData({ username: "", email: "", password: "" });
@@ -76,7 +80,7 @@ function AuthPage({ mode }) {
     <>
       <Navbar />
       <main className="min-h-[70vh] bg-[#f9faff] px-4 py-10 text-[#272727] sm:px-6 sm:py-14">
-        <div className="mx-auto grid w-full max-w-4xl overflow-hidden rounded-2xl border border-[#e8e8e8] bg-white shadow-[0_12px_40px_rgba(0,7,27,0.06)] md:min-h-135 md:grid-cols-[0.85fr_1.15fr]">
+        <div className="mx-auto grid w-full max-w-md overflow-hidden rounded-2xl border border-[#e8e8e8] bg-white shadow-[0_12px_40px_rgba(0,7,27,0.06)] md:min-h-135 ">
 
           <section className="flex items-center px-6 py-9 sm:px-10 sm:py-12">
             <div className="mx-auto w-full max-w-md">

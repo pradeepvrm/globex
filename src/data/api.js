@@ -1,5 +1,12 @@
+export const AUTH_TOKEN_KEY = "authToken";
+
 export async function fetchApi(url, options) {
-  const response = await fetch(url, options);
+  const token = window.localStorage.getItem(AUTH_TOKEN_KEY);
+  const headers = new Headers(options?.headers);
+  if (token && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+  const response = await fetch(url, { ...options, headers });
   const body = await response.json();
 
   if (body === null || typeof body !== "object") {
