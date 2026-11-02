@@ -3,7 +3,6 @@ import { useAuth } from "../auth/AuthContext";
 import logo from "../assets/logo.png";
 import heart from "../assets/heart.png";
 import cart from "../assets/cart.png";
-import login from "../assets/login.png"
 import useLocalStorage from "../data/useLocalStorage";
 import SearchAutocomplete from "./SearchAutocomplete";
 
@@ -16,13 +15,12 @@ export default function Navbar() {
       key={userId}
       isSignedIn={isSignedIn}
       username={user?.username}
-      onSignOut={logout}
       cartStorageKey={`cartItems:${userId}`}
     />
   );
 }
 
-function NavbarContent({ isSignedIn, username, onSignOut, cartStorageKey }) {
+function NavbarContent({ isSignedIn, username, cartStorageKey }) {
   const navigate = useNavigate();
   const [cartItems] = useLocalStorage(cartStorageKey, []);
   const displayedCartCount = Array.isArray(cartItems)
@@ -54,7 +52,6 @@ function NavbarContent({ isSignedIn, username, onSignOut, cartStorageKey }) {
           ))}
           <Link to="/products" className="transition-colors hover:text-[#848484]">Shop</Link>
           <Link to="/contact" className="transition-colors hover:text-[#848484]">Contact us</Link>
-          <Link to="/orders" className="transition-colors hover:text-[#848484]">My Orders</Link>
         </div>
 
         <SearchAutocomplete
@@ -68,7 +65,7 @@ function NavbarContent({ isSignedIn, username, onSignOut, cartStorageKey }) {
               type="button"
               className="hidden h-7 w-7 items-center justify-center sm:flex"
             >
-              <img src={heart} alt="" className="h-5 w-5" />
+              <img src={heart} alt="" className="h-4 w-4" />
             </button>
           </Link>
           <Link to="/cart">
@@ -76,7 +73,7 @@ function NavbarContent({ isSignedIn, username, onSignOut, cartStorageKey }) {
               type="button"
               className="relative flex h-8 w-8 items-center justify-center"
             >
-              <img src={cart} alt="" className="h-5 w-5" />
+              <img src={cart} alt="" className="h-4 w-4" />
               {displayedCartCount > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-black px-1 text-[10px] text-white">
                   {displayedCartCount}
@@ -87,10 +84,7 @@ function NavbarContent({ isSignedIn, username, onSignOut, cartStorageKey }) {
           
           {isSignedIn ? (
             <div className="flex items-center gap-3 text-sm">
-              <span className="max-w-28 truncate text-[#646464]">{username}</span>
-              <button type="button" onClick={onSignOut} className="text-[#646464] transition-colors hover:text-black">
-                <img className="max-w-5 cursor-pointer" src={login} />
-              </button>
+              <Link to="/profile" className="max-w-36 truncate rounded-full px-3 py-2 text-[#646464] shadow transition-colors hover:text-black" aria-label={`Open ${username}'s profile`}>{username}</Link>
             </div>
           ) : (
             <Link

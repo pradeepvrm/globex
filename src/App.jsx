@@ -4,7 +4,7 @@ import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import Contact from './pages/Contact'
 import Home from './pages/Home'
-import Orders from './pages/Orders'
+import Profile from './pages/Profile'
 import Products from './pages/Products'
 import SingleProduct from './pages/SingleProduct'
 import Wishlist from './pages/Wishlist'
@@ -38,7 +38,7 @@ function AppRoutes() {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:productId" element={<SingleProduct />} />
         <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/orders" element={<Orders />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />

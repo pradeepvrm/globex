@@ -1,6 +1,4 @@
 import { Link, Navigate } from "react-router-dom";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import { fetchApi } from "../data/api";
 import { useAuth } from "../auth/AuthContext";
@@ -18,7 +16,7 @@ function formatDate(value) {
   return date.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
 }
 
-export default function Orders() {
+export default function Orders({ embedded = false }) {
   const { isSignedIn, user } = useAuth();
   const userId = user?.id ?? "guest";
 
@@ -26,10 +24,10 @@ export default function Orders() {
     return <Navigate to="/sign-in" />;
   }
 
-  return <OrdersForUser userId={userId} />;
+  return <OrdersForUser userId={userId} embedded={embedded} />;
 }
 
-function OrdersForUser({ userId }) {
+function OrdersForUser({ userId, embedded }) {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
@@ -57,14 +55,15 @@ function OrdersForUser({ userId }) {
     return () => controller.abort();
   }, [userId]);
 
+  const OrdersWrapper = embedded ? "div" : "main";
+
   return (
     <>
-      <Navbar />
-      <main className="min-h-[55vh] bg-[#f9faff]">
-        <section className="mx-auto w-full max-w-300 px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-          <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
+      <OrdersWrapper className={embedded ? "bg-white" : "min-h-[55vh] bg-[#f9faff]"}>
+        <section className={embedded ? "w-full px-4 py-6 sm:px-6 sm:py-7 lg:px-8" : "mx-auto w-full max-w-300 px-4 py-8 sm:px-6 lg:px-8 lg:py-12"}>
+          <div className={`mb-7 flex flex-wrap items-end justify-between gap-3${embedded ? " sm:mb-6" : ""}`}>
             <div>
-              <h1 className="text-2xl font-bold text-blue-950 sm:text-3xl">My Orders</h1>
+              <h1 className="text-2xl font-bold text-blue-950 sm:text-2xl">Your Orders</h1>
               <p className="mt-2 text-sm text-[#646464]">
                 {orders.length} {orders.length === 1 ? "order" : "orders"} placed
               </p>
@@ -102,8 +101,7 @@ function OrdersForUser({ userId }) {
             </section>
           )}
         </section>
-      </main>
-      <Footer />
+      </OrdersWrapper>
     </>
   );
 }

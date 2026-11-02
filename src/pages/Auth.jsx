@@ -59,7 +59,7 @@ function AuthPage({ mode }) {
       }
 
       login(result.data.token);
-      navigate("/", { replace: true });
+      navigate("/profile", { replace: true });
     } catch (error) {
       setFeedback({
         type: "error",
