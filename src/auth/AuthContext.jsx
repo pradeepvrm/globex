@@ -1,5 +1,9 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { AUTH_TOKEN_KEY } from "../data/api";
+
+const apiBaseUrl = import.meta.env.DEV
+  ? ""
+  : (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 
 const AuthContext = createContext(null);
 
@@ -19,29 +23,43 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => window.sessionStorage.getItem(AUTH_TOKEN_KEY));
   const user = token ? userFromToken(token) : null;
 
-  function login(nextToken) {
+  const login = useCallback((nextToken) => {
     window.sessionStorage.setItem(AUTH_TOKEN_KEY, nextToken);
     setToken(nextToken);
-  }
+  }, []);
 
-  function logout() {
+  const loginWithGoogle = useCallback(async (credential, mode) => {
+    const response = await fetch(`${apiBaseUrl}/api/users/google`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ credential, mode }),
+    });
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      throw new Error(result.msg || "Google authentication failed.");
+    }
+    login(result.data.token);
+    return result.data;
+  }, [login]);
+
+  const logout = useCallback(() => {
     window.sessionStorage.removeItem(AUTH_TOKEN_KEY);
     setToken(null);
-  }
+  }, []);
 
   const value = useMemo(() => ({
     token,
     user,
     isSignedIn: Boolean(token && user),
     login,
+    loginWithGoogle,
     logout,
-  }), [token, user?.id, user?.username]);
+  }), [token, user?.id, user?.username, login, loginWithGoogle, logout]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used inside AuthProvider");
   return context;
 }

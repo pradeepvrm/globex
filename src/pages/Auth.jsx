@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../auth/AuthContext";
@@ -6,10 +6,11 @@ import { useAuth } from "../auth/AuthContext";
 const apiBaseUrl = import.meta.env.DEV
   ? ""
   : (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function AuthPage({ mode }) {
   const isSignUp = mode === "sign-up";
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
@@ -18,6 +19,58 @@ function AuthPage({ mode }) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  const googleButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!googleClientId || !googleButtonRef.current) return;
+
+    let cancelled = false;
+    const initializeGoogleButton = () => {
+      if (cancelled || !window.google?.accounts?.id || !googleButtonRef.current) return;
+      window.google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: async ({ credential }) => {
+          setIsSubmitting(true);
+          setFeedback(null);
+          try {
+            await loginWithGoogle(credential, isSignUp ? "signup" : "login");
+            navigate("/profile", { replace: true });
+          } catch (error) {
+            setFeedback({
+              type: "error",
+              message: error instanceof Error ? error.message : "Google authentication failed.",
+            });
+          } finally {
+            setIsSubmitting(false);
+          }
+        },
+      });
+      window.google.accounts.id.renderButton(googleButtonRef.current, {
+        theme: "outline",
+        size: "large",
+        text: isSignUp ? "signup_with" : "signin_with",
+        shape: "rectangular",
+        width: 360,
+      });
+    };
+
+    let script = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+    if (!script) {
+      script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onerror = () => setFeedback({ type: "error", message: "Could not load Google sign-in." });
+      document.head.appendChild(script);
+    }
+    if (window.google?.accounts?.id) initializeGoogleButton();
+    else script.addEventListener("load", initializeGoogleButton, { once: true });
+
+    return () => {
+      cancelled = true;
+      script?.removeEventListener("load", initializeGoogleButton);
+    };
+  }, [isSignUp, loginWithGoogle, navigate]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -168,6 +221,10 @@ function AuthPage({ mode }) {
                       : "Sign in"}
                 </button>
               </form>
+
+              <div className="mt-5">
+                  <div ref={googleButtonRef} className="flex min-h-10 justify-center" />
+              </div>
 
               <p className="mt-6 text-center text-sm text-[#646464]">
                 {isSignUp ? "Already registered?" : "New to Globex?"}{" "}
