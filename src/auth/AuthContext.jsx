@@ -16,16 +16,16 @@ function userFromToken(token) {
 }
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => window.localStorage.getItem(AUTH_TOKEN_KEY));
+  const [token, setToken] = useState(() => window.sessionStorage.getItem(AUTH_TOKEN_KEY));
   const user = token ? userFromToken(token) : null;
 
   function login(nextToken) {
-    window.localStorage.setItem(AUTH_TOKEN_KEY, nextToken);
+    window.sessionStorage.setItem(AUTH_TOKEN_KEY, nextToken);
     setToken(nextToken);
   }
 
   function logout() {
-    window.localStorage.removeItem(AUTH_TOKEN_KEY);
+    window.sessionStorage.removeItem(AUTH_TOKEN_KEY);
     setToken(null);
   }
 
