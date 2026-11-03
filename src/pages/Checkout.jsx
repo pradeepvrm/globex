@@ -138,7 +138,7 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
               <h2 className="mt-5 text-2xl font-bold text-[#101828]">Order placed!</h2>
               <p className="mt-2 text-xs text-[#667085]">Order #{placedOrder.id}</p>
               <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-                <Link to="/orders" className="rounded-lg bg-[#00071b] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#17213a]">
+                <Link to="/profile" className="rounded-lg bg-[#00071b] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#17213a]">
                   View my orders
                 </Link>
                 <button type="button" onClick={onClose} className="rounded-lg border border-[#d0d5dd] px-5 py-3 text-sm font-semibold text-[#344054] transition hover:bg-[#f2f4f7]">

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../auth/AuthContext";
 
@@ -10,7 +10,7 @@ const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function AuthPage({ mode }) {
   const isSignUp = mode === "sign-up";
-  const { login, loginWithGoogle } = useAuth();
+  const { isSignedIn, login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
@@ -33,7 +33,7 @@ function AuthPage({ mode }) {
           setIsSubmitting(true);
           setFeedback(null);
           try {
-            await loginWithGoogle(credential, isSignUp ? "signup" : "login");
+            await loginWithGoogle(credential);
             navigate("/profile", { replace: true });
           } catch (error) {
             setFeedback({
@@ -48,7 +48,7 @@ function AuthPage({ mode }) {
       window.google.accounts.id.renderButton(googleButtonRef.current, {
         theme: "outline",
         size: "large",
-        text: isSignUp ? "signup_with" : "signin_with",
+        text: "continue_with",
         shape: "rectangular",
         width: 360,
       });
@@ -126,6 +126,8 @@ function AuthPage({ mode }) {
     }
   }
 
+  if (isSignedIn) return <Navigate to="/profile" replace />;
+
   return (
     <>
       <Navbar />
@@ -148,7 +150,7 @@ function AuthPage({ mode }) {
               <form onSubmit={handleSubmit} className="mt-7 space-y-5">
                 <div>
                   <label htmlFor="auth-username" className="mb-2 block text-sm font-semibold">
-                    Username
+                    Username <i className="opacity-75">or</i> Email
                   </label>
                   <input
                     id="auth-username"
