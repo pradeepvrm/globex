@@ -10,7 +10,7 @@ const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function AuthPage({ mode }) {
   const isSignUp = mode === "sign-up";
-  const { isSignedIn, login, loginWithGoogle } = useAuth();
+  const { isSignedIn, isAdmin, login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
@@ -112,7 +112,7 @@ function AuthPage({ mode }) {
       }
 
       login(result.data.token);
-      navigate("/profile", { replace: true });
+      navigate(result.data.role === "admin" ? "/admin" : "/profile", { replace: true });
     } catch (error) {
       setFeedback({
         type: "error",
@@ -126,7 +126,7 @@ function AuthPage({ mode }) {
     }
   }
 
-  if (isSignedIn) return <Navigate to="/profile" replace />;
+  if (isSignedIn) return <Navigate to={isAdmin ? "/admin" : "/profile"} replace />;
 
   return (
     <>
