@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import AdminProducts from "./AdminProducts";
+import AdminUsers from "./AdminUsers";
 import { useAuth } from "../auth/AuthContext";
 
 const STATUSES = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
@@ -16,10 +17,13 @@ function formatDate(value) {
 export default function Admin() {
   const { token } = useAuth();
   const [orders, setOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [savingId, setSavingId] = useState("");
   const [view, setView] = useState("orders");
+  const [ordersForUser, setOrdersForUser] = useState(null);
+  const [userOrdersLoading, setUserOrdersLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -37,7 +41,10 @@ export default function Admin() {
         }
 
         const data = await response.json();
-        if (!cancelled) setOrders(data.data);
+        if (!cancelled) {
+          setAllOrders(data.data || []);
+          setOrders(data.data || []);
+        }
       } catch (loadError) {
         if (!cancelled) setError(loadError.message || "Could not connect to the API.");
       } finally {
@@ -83,6 +90,34 @@ export default function Admin() {
     }
   };
 
+  const handleViewUserOrders = async (user) => {
+    setOrdersForUser(user);
+    setView("orders");
+    setUserOrdersLoading(true);
+    setError("");
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/${user.id}/orders`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(body.msg || "Could not load this user's orders.");
+      setOrders(body.data || []);
+    } catch (loadError) {
+      setError(loadError.message || "Could not load this user's orders.");
+    } finally {
+      setUserOrdersLoading(false);
+    }
+  };
+
+  const showAllOrders = () => {
+    setOrdersForUser(null);
+    setOrders(allOrders);
+    setIsLoading(false);
+    setUserOrdersLoading(false);
+    setError("");
+    setView("orders");
+  };
+
   const revenue = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
 
   return (
@@ -95,14 +130,14 @@ export default function Admin() {
               <h1 className="text-2xl font-bold text-blue-950 sm:text-3xl">Welcome, Admin</h1>
               <p className="mt-2 text-sm text-[#646464]">
                 {view === "orders"
-                  ? `${orders.length} ${orders.length === 1 ? "order" : "orders"} · ${formatPrice(revenue)} total`
-                  : "Manage the product catalog"}
+                  ? ordersForUser ? `Orders for ${ordersForUser.username} · ${orders.length} ${orders.length === 1 ? "order" : "orders"} · ${formatPrice(revenue)} total` : `${orders.length} ${orders.length === 1 ? "order" : "orders"} · ${formatPrice(revenue)} total`
+                : view === "products" ? "Manage the product catalog" : "Manage registered users"}
               </p>
             </div>
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={() => setView("orders")}
+                onClick={showAllOrders}
                 className={`rounded-md px-4 py-2 text-xs font-bold ${view === "orders" ? "bg-[#00071b] text-white" : "border border-[#d0d5dd] text-[#272727]"}`}
               >
                 Orders
@@ -114,18 +149,31 @@ export default function Admin() {
               >
                 Products
               </button>
+              <button
+                type="button"
+                onClick={() => setView("users")}
+                className={`rounded-md px-4 py-2 text-xs font-bold ${view === "users" ? "bg-[#00071b] text-white" : "border border-[#d0d5dd] text-[#272727]"}`}
+              >
+                Users
+              </button> 
             </div>
           </div>
 
           {view === "orders" ? (
             <>
+          {ordersForUser && (
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#e8e8e8] bg-white px-4 py-3">
+              <p className="text-sm text-[#646464]">Showing orders for <span className="font-bold text-[#00071b]">{ordersForUser.username}</span></p>
+              <button type="button" onClick={showAllOrders} className="text-xs font-bold text-blue-950 underline underline-offset-2">Show all orders</button>
+            </div>
+          )}
           {error && (
             <p role="alert" className="mb-5 rounded-xl border border-[#fecdca] bg-white px-5 py-4 text-sm text-[#b42318]">
               {error}
             </p>
           )}
 
-          {isLoading ? (
+          {isLoading || userOrdersLoading ? (
             <p className="py-12 text-center text-sm text-[#646464]">Loading orders...</p>
           ) : orders.length === 0 ? (
             <p className="rounded-xl border border-[#e8e8e8] bg-white px-5 py-12 text-center text-sm text-[#646464]">
@@ -175,8 +223,10 @@ export default function Admin() {
             </div>
           )}
             </>
-          ) : (
+          ) : view === "products" ? (
             <AdminProducts />
+          ) : (
+            <AdminUsers onViewOrders={handleViewUserOrders} />
           )}
         </section>
       </main>
