@@ -9,6 +9,7 @@ const EMPTY_FORM = {
   category: "women",
   price: "",
   originalPrice: "",
+  quantity: "0",
   rating: "",
   image: "",
   imageAlt: "",
@@ -25,6 +26,7 @@ function productToForm(product) {
     category: product.category ?? "women",
     price: product.price ?? "",
     originalPrice: product.originalPrice ?? "",
+    quantity: product.quantity ?? 0,
     rating: product.rating ?? "",
     image: product.image ?? "",
     imageAlt: product.imageAlt ?? "",
@@ -245,6 +247,10 @@ export default function AdminProducts() {
               <input required type="number" min="0" step="0.01" name="originalPrice" value={form.originalPrice} onChange={handleChange} className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
             </label>
             <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727]">
+              Quantity in stock
+              <input required type="number" min="0" step="1" name="quantity" value={form.quantity} onChange={handleChange} className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
+            </label>
+            <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727]">
               Rating (0-5)
               <input type="number" min="0" max="5" step="0.1" name="rating" value={form.rating} onChange={handleChange} className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
             </label>
@@ -293,6 +299,7 @@ export default function AdminProducts() {
                 <th className="px-4 py-3">Category</th>
                 <th className="px-4 py-3">Price</th>
                 <th className="px-4 py-3">Original</th>
+                <th className="px-4 py-3">Stock</th>
                 <th className="px-4 py-3">Rating</th>
                 <th className="px-4 py-3">Actions</th>
               </tr>
@@ -310,6 +317,7 @@ export default function AdminProducts() {
                   <td className="px-4 py-3 capitalize text-[#646464]">{product.category}</td>
                   <td className="px-4 py-3 font-bold text-[#00071b]">{formatPrice(product.price)}</td>
                   <td className="px-4 py-3 text-[#646464]">{formatPrice(product.originalPrice)}</td>
+                  <td className="px-4 py-3 text-[#646464]">{product.quantity ?? 0}</td>
                   <td className="px-4 py-3 text-[#646464]">{product.rating ?? "—"}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
