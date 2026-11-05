@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
+import { resolveProductImageUrl } from "../data/api";
 
 const CATEGORIES = ["men", "women", "kids"];
 
@@ -13,7 +14,7 @@ const EMPTY_FORM = {
   rating: "",
   image: "",
   imageAlt: "",
-  gallery: "",
+  gallery: [],
   description: "",
 };
 
@@ -30,7 +31,7 @@ function productToForm(product) {
     rating: product.rating ?? "",
     image: product.image ?? "",
     imageAlt: product.imageAlt ?? "",
-    gallery: Array.isArray(product.gallery) ? product.gallery.join("\n") : "",
+    gallery: Array.isArray(product.gallery) ? product.gallery : [],
     description: product.description ?? "",
   };
 }
@@ -47,6 +48,9 @@ export default function AdminProducts() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
+  const [imageFile, setImageFile] = useState(null);
+  const [galleryFiles, setGalleryFiles] = useState([]);
+  const imageInputRef = useRef(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -86,6 +90,8 @@ export default function AdminProducts() {
   const openCreateForm = () => {
     setEditingId(null);
     setForm(EMPTY_FORM);
+    setImageFile(null);
+    setGalleryFiles([]);
     setFormError("");
     setShowForm(true);
   };
@@ -93,6 +99,8 @@ export default function AdminProducts() {
   const openEditForm = (product) => {
     setEditingId(product.id);
     setForm(productToForm(product));
+    setImageFile(null);
+    setGalleryFiles([]);
     setFormError("");
     setShowForm(true);
   };
@@ -101,6 +109,8 @@ export default function AdminProducts() {
     setShowForm(false);
     setEditingId(null);
     setForm(EMPTY_FORM);
+    setImageFile(null);
+    setGalleryFiles([]);
     setFormError("");
   };
 
@@ -109,13 +119,7 @@ export default function AdminProducts() {
     setIsSaving(true);
     setFormError("");
 
-    const payload = {
-      ...form,
-      gallery: form.gallery
-        .split(/[\n,]+/)
-        .map((url) => url.trim())
-        .filter(Boolean),
-    };
+    const payload = new FormData(event.currentTarget);
 
     try {
       const response = await fetch(
@@ -125,10 +129,9 @@ export default function AdminProducts() {
         {
           method: editingId ? "PUT" : "POST",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(payload),
+          body: payload,
         },
       );
 
@@ -255,16 +258,64 @@ export default function AdminProducts() {
               <input type="number" min="0" max="5" step="0.1" name="rating" value={form.rating} onChange={handleChange} className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
             </label>
             <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727] sm:col-span-2 lg:col-span-3">
-              Main image URL
-              <input required name="image" value={form.image} onChange={handleChange} className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
+              Main image
+              <input
+                required={!form.image && !imageFile}
+                type="file"
+                name="imageFile"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                ref={imageInputRef}
+                onChange={(event) => setImageFile(event.target.files?.[0] || null)}
+                className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal"
+              />
+              {imageFile ? (
+                <span className="mt-1 flex items-center gap-2 font-normal text-[#646464]">
+                  {imageFile.name}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setImageFile(null);
+                      if (imageInputRef.current) imageInputRef.current.value = "";
+                    }}
+                    className="font-semibold text-blue-950 underline"
+                  >
+                    Remove
+                  </button>
+                </span>
+              ) : form.image ? (
+                <img src={resolveProductImageUrl(form.image)} alt="Current main product" className="mt-2 h-24 w-20 rounded-md bg-[#f0f0f0] object-cover" />
+              ) : null}
+              <input type="hidden" name="image" value={form.image} />
             </label>
             <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727] sm:col-span-2 lg:col-span-3">
               Image alt text
               <input name="imageAlt" value={form.imageAlt} onChange={handleChange} className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
             </label>
             <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727] sm:col-span-2 lg:col-span-3">
-              Gallery URLs (one per line)
-              <textarea name="gallery" rows="3" value={form.gallery} onChange={handleChange} className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
+              Gallery images
+              <input
+                type="file"
+                name="galleryFiles"
+                multiple
+                accept="image/jpeg, image/png, image/webp"
+                onChange={(event) => {
+                  setGalleryFiles(Array.from(event.target.files || []));
+                }}
+                className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal"
+              />
+              {form.gallery.map((image, index) => (
+                <input key={`${image}-${index}`} type="hidden" name="gallery" value={image} />
+              ))}
+              {(form.gallery.length > 0 || galleryFiles.length > 0) && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {form.gallery.map((image, index) => (
+                    <img key={`${image}-${index}`} src={resolveProductImageUrl(image)} alt={`Gallery image ${index + 1}`} className="h-16 w-12 rounded-md bg-[#f0f0f0] object-cover" />
+                  ))}
+                  {galleryFiles.map((file, index) => (
+                    <span key={`${file.name}-${index}`} className="rounded-md bg-[#f4f6fa] px-2 py-1 font-normal text-[#646464]">{file.name}</span>
+                  ))}
+                </div>
+              )}
             </label>
             <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727] sm:col-span-2 lg:col-span-3">
               Description
@@ -308,7 +359,7 @@ export default function AdminProducts() {
               {products.map((product) => (
                 <tr key={product.id}>
                   <td className="px-4 py-3">
-                    <img src={product.image} alt={product.imageAlt || product.name} className="h-14 w-11 rounded-md bg-[#f0f0f0] object-cover" />
+                    <img src={resolveProductImageUrl(product.image)} alt={product.imageAlt || product.name} className="h-14 w-11 rounded-md bg-[#f0f0f0] object-cover" />
                   </td>
                   <td className="px-4 py-3">
                     <p className="font-bold text-[#00071b]">{product.name}</p>

@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import OrderSummary from "../components/OrderSummary";
 import useLocalStorage from "../data/useLocalStorage";
 import { useAuth } from "../auth/AuthContext";
+import { resolveProductImageUrl } from "../data/api";
 
 export default function Cart() {
   const { user } = useAuth();
@@ -54,7 +55,7 @@ function CartForUser({ storageKey }) {
                   {items.map((item) => (
                     <li key={`${item.id}-${item.size || "one-size"}`} className="grid grid-cols-1 gap-3 p-3 sm:grid-cols-[minmax(0,1fr)_100px_95px] sm:items-center sm:gap-3 sm:px-4 sm:py-4 md:px-5">
                       <div className="flex min-w-0 items-center gap-3">
-                        <Link to={`/products/${item.id}`}><img src={item.image} alt={item.imageAlt} className="h-20 w-16 shrink-0 rounded-md bg-[#f0f0f0] object-cover sm:h-22 sm:w-18" /></Link>
+                        <Link to={`/products/${item.id}`}><img src={resolveProductImageUrl(item.image)} alt={item.imageAlt} className="h-20 w-16 shrink-0 rounded-md bg-[#f0f0f0] object-cover sm:h-22 sm:w-18" /></Link>
                         <div className="min-w-0">
                           <p className="text-[10px] text-[#848484]">{item.brand}</p>
                           <h2 className="mt-1 truncate text-xs font-bold text-[#272727] sm:text-sm">{item.name}</h2>

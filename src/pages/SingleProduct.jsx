@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import useLocalStorage from "../data/useLocalStorage";
-import { fetchApi } from "../data/api";
+import { fetchApi, resolveProductImageUrl } from "../data/api";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
 const colors = ["Blue", "Black", "White"];
@@ -255,7 +255,7 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
     );
   }
 
-  const gallery = product.gallery?.length ? product.gallery : [product.image];
+  const gallery = (product.gallery?.length ? product.gallery : [product.image]).map(resolveProductImageUrl);
   const heroImage = gallery[selectedImageIndex % gallery.length];
   const galleryThumbnails = Array.from({ length: 5 }, (_, index) => gallery[index % gallery.length]);
   const discount = product.originalPrice > product.price

@@ -1,5 +1,12 @@
 export const AUTH_TOKEN_KEY = "authToken";
 
+export function resolveProductImageUrl(image) {
+  if (typeof image === "string" && image.startsWith("/uploads/")) {
+    return new URL(image, import.meta.env.VITE_API_URL).href;
+  }
+  return image;
+}
+
 export async function fetchApi(url, options) {
   const token = window.sessionStorage.getItem(AUTH_TOKEN_KEY);
   const headers = new Headers(options?.headers);

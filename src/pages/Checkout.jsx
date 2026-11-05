@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import useLocalStorage from "../data/useLocalStorage";
-import { fetchApi } from "../data/api";
+import { fetchApi, resolveProductImageUrl } from "../data/api";
 import { useAuth } from "../auth/AuthContext";
 
 const formatPrice = (amount) => `Rs. ${amount.toLocaleString("en-IN")}`;
@@ -246,7 +246,7 @@ function CheckoutContent({ isModal, user, storageKey, onClose }) {
                   {items.map((item) => (
                     <li key={`${item.id}-${item.size || "one-size"}`} className="flex gap-3">
                       <div className="relative h-17 w-14 shrink-0 overflow-hidden rounded-lg bg-[#eaecf0]">
-                        <img src={item.image} alt={item.imageAlt || item.name} className="h-full w-full object-cover" />
+                        <img src={resolveProductImageUrl(item.image)} alt={item.imageAlt || item.name} className="h-full w-full object-cover" />
                       </div>
                       <div className="min-w-0 flex-1 pt-0.5">
                         <p className="text-[10px] text-[#667085]">{item.brand}</p>
