@@ -208,13 +208,25 @@ export default function AdminProducts() {
       )}
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="mb-6 rounded-xl border border-[#e8e8e8] bg-white p-5 shadow-[0_0_20px_rgba(0,0,0,0.04)]">
+        <div
+          className="fixed inset-0 z-100 flex items-center justify-center overflow-y-auto bg-[#101828]/45 p-3 backdrop-blur-[3px] sm:p-5"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closeForm();
+          }}
+        >
+        <form
+          onSubmit={handleSubmit}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="product-form-title"
+          className="my-auto no-scrollbar max-h-[calc(100vh-1.5rem)] w-full max-w-5xl overflow-y-auto rounded-2xl border border-[#e8e8e8] bg-white p-5 shadow-[0_24px_90px_rgba(13,22,41,0.25)] sm:max-h-[calc(100vh-2.5rem)] sm:p-7"
+        >
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-[#00071b]">
+            <h2 id="product-form-title" className="text-lg font-bold text-[#00071b]">
               {editingId ? `Edit product #${editingId}` : "New product"}
             </h2>
             <button type="button" onClick={closeForm} className="text-xs font-bold text-[#646464] hover:text-[#00071b]">
-              Cancel
+              ✕
             </button>
           </div>
 
@@ -332,6 +344,7 @@ export default function AdminProducts() {
             </button>
           </div>
         </form>
+        </div>
       )}
 
       {isLoading ? (
