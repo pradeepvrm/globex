@@ -5,10 +5,11 @@ import { useAuth } from "../auth/AuthContext";
 import Orders from "./Orders";
 
 export default function Profile() {
-  const { isSignedIn, user, logout } = useAuth();
+  const { isSignedIn, isAdmin, user, logout } = useAuth();
   const navigate = useNavigate();
 
-  if (!isSignedIn) return <Navigate to="/sign-in" replace />;
+  if (!isSignedIn ) return <Navigate to="/sign-in" replace />;
+  if (isAdmin) return <Navigate to="/admin" replace />
 
   function handleLogout() {
     logout();

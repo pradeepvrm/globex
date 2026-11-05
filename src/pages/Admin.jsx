@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import AdminProducts from "./AdminProducts";
 import AdminUsers from "./AdminUsers";
@@ -15,7 +16,8 @@ function formatDate(value) {
 }
 
 export default function Admin() {
-  const { token } = useAuth();
+  const { logout, token } = useAuth();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [allOrders, setAllOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -135,13 +137,19 @@ export default function Admin() {
 
   const revenue = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
 
+  function handleLogout() {
+    logout();
+    navigate("/", { replace: true });
+  }
+
   return (
     <>
       <Navbar />
       <main className="min-h-[calc(100vh-3.5rem)] bg-[#f4f6fa]">
         <section className="mx-auto w-full max-w-360 px-4 py-6 sm:px-6 sm:py-9 lg:px-10">
           <div className="mb-7 overflow-hidden rounded-3xl bg-[#101a31] px-6 py-7 text-white shadow-[0_18px_50px_rgba(16,26,49,0.16)] sm:px-9 sm:py-9">
-            <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex flex-col ">
+              <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.24em] text-[#aebbd2]">Globex / Administration</p>
                 <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Welcome back, Admin</h1>
@@ -151,7 +159,16 @@ export default function Admin() {
                 : view === "products" ? "Manage the product catalog" : "Manage registered users"}
                 </p>
               </div>
-              <nav aria-label="Admin sections" className="flex w-full rounded-xl border border-white/10 bg-white/5 p-1 sm:w-fit">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                >
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg>
+                  Log out
+                </button>
+              </div>
+              <nav aria-label="Admin sections" className="flex w-full rounded-xl border border-white/10 bg-white/5 p-1 sm:w-fit sm:self-end">
                 {[
                   ["orders", "Orders", showAllOrders],
                   ["products", "Products", () => setView("products")],
