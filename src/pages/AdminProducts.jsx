@@ -3,6 +3,8 @@ import { useAuth } from "../auth/AuthContext";
 import { resolveProductImageUrl } from "../data/api";
 
 const CATEGORIES = ["men", "women", "kids"];
+const imageInputClassName =
+  "block w-full cursor-pointer rounded-lg border border-dashed border-[#cbd3df] bg-[#f8f9fb] px-3 py-2 text-sm font-normal text-[#646464] outline-none transition hover:border-[#7187ad] focus:border-[#7187ad] focus:ring-2 focus:ring-[#7187ad]/15 file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-[#101a31] file:px-3 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-[#263653]";
 
 const EMPTY_FORM = {
   name: "",
@@ -19,6 +21,17 @@ const EMPTY_FORM = {
 };
 
 const formatPrice = (amount) => `Rs. ${Number(amount || 0).toLocaleString("en-IN")}`;
+
+function ImagePreview({ src, alt, name }) {
+  return (
+    <div className="w-24 overflow-hidden rounded-lg border border-[#e4e7ec] bg-white p-2">
+      <img src={src} alt={alt} className="aspect-3/4 w-full rounded-md bg-[#f0f0f0] object-cover" />
+      <p className="mt-1 truncate text-[10px] font-medium text-[#646464]" title={name}>
+        {name}
+      </p>
+    </div>
+  );
+}
 
 function productToForm(product) {
   return {
@@ -51,6 +64,29 @@ export default function AdminProducts() {
   const [imageFile, setImageFile] = useState(null);
   const [galleryFiles, setGalleryFiles] = useState([]);
   const imageInputRef = useRef(null);
+  const imagePreviewUrlRef = useRef(null);
+  const galleryPreviewUrlsRef = useRef([]);
+
+  useEffect(() => () => {
+    if (imagePreviewUrlRef.current) URL.revokeObjectURL(imagePreviewUrlRef.current);
+    galleryPreviewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+  }, []);
+
+  const updateImageFile = (file) => {
+    if (imagePreviewUrlRef.current) URL.revokeObjectURL(imagePreviewUrlRef.current);
+    const selection = file ? { file, url: URL.createObjectURL(file) } : null;
+    imagePreviewUrlRef.current = selection?.url || null;
+    setImageFile(selection);
+  };
+
+  const updateGalleryFiles = (files) => {
+    galleryPreviewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    const selections = files.map((file) => ({ file, url: URL.createObjectURL(file) }));
+    galleryPreviewUrlsRef.current = selections.map(({ url }) => url);
+    setGalleryFiles(selections);
+  };
+
+  const imagePreviews = imageFile ? [imageFile] : [];
 
   useEffect(() => {
     let cancelled = false;
@@ -90,8 +126,8 @@ export default function AdminProducts() {
   const openCreateForm = () => {
     setEditingId(null);
     setForm(EMPTY_FORM);
-    setImageFile(null);
-    setGalleryFiles([]);
+    updateImageFile(null);
+    updateGalleryFiles([]);
     setFormError("");
     setShowForm(true);
   };
@@ -99,8 +135,8 @@ export default function AdminProducts() {
   const openEditForm = (product) => {
     setEditingId(product.id);
     setForm(productToForm(product));
-    setImageFile(null);
-    setGalleryFiles([]);
+    updateImageFile(null);
+    updateGalleryFiles([]);
     setFormError("");
     setShowForm(true);
   };
@@ -109,8 +145,8 @@ export default function AdminProducts() {
     setShowForm(false);
     setEditingId(null);
     setForm(EMPTY_FORM);
-    setImageFile(null);
-    setGalleryFiles([]);
+    updateImageFile(null);
+    updateGalleryFiles([]);
     setFormError("");
   };
 
@@ -255,15 +291,15 @@ export default function AdminProducts() {
             </label>
             <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727]">
               Price
-              <input required type="number" min="0" step="0.01" name="price" value={form.price} onChange={handleChange} className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
+              <input required type="number" min="0" name="price" value={form.price} onChange={handleChange} className="no-spinner rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
             </label>
             <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727]">
               Original price
-              <input required type="number" min="0" step="0.01" name="originalPrice" value={form.originalPrice} onChange={handleChange} className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
+              <input required type="number" min="0" name="originalPrice" value={form.originalPrice} onChange={handleChange} className="no-spinner rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
             </label>
             <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727]">
               Quantity in stock
-              <input required type="number" min="0" step="1" name="quantity" value={form.quantity} onChange={handleChange} className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
+              <input required type="number" min="0" name="quantity" value={form.quantity} onChange={handleChange} className="no-spinner rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal" />
             </label>
             <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727]">
               Rating (0-5)
@@ -277,16 +313,15 @@ export default function AdminProducts() {
                 name="imageFile"
                 accept="image/jpeg,image/png,image/webp,image/gif"
                 ref={imageInputRef}
-                onChange={(event) => setImageFile(event.target.files?.[0] || null)}
-                className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal"
+                onChange={(event) => updateImageFile(event.target.files?.[0] || null)}
+                className={imageInputClassName}
               />
-              {imageFile ? (
-                <span className="mt-1 flex items-center gap-2 font-normal text-[#646464]">
-                  {imageFile.name}
+              {imageFile && (
+                <span className="flex items-center gap-2 font-normal text-[#646464]">
                   <button
                     type="button"
                     onClick={() => {
-                      setImageFile(null);
+                      updateImageFile(null);
                       if (imageInputRef.current) imageInputRef.current.value = "";
                     }}
                     className="font-semibold text-blue-950 underline"
@@ -294,9 +329,21 @@ export default function AdminProducts() {
                     Remove
                   </button>
                 </span>
-              ) : form.image ? (
-                <img src={resolveProductImageUrl(form.image)} alt="Current main product" className="mt-2 h-24 w-20 rounded-md bg-[#f0f0f0] object-cover" />
-              ) : null}
+              )}
+              {(imagePreviews.length > 0 || (!imageFile && form.image)) && (
+                <div className="flex flex-wrap gap-2">
+                  {imagePreviews.map(({ file, url }) => (
+                    <ImagePreview key={`${file.name}-${file.lastModified}`} src={url} alt="Selected main product" name={file.name} />
+                  ))}
+                  {!imageFile && form.image && (
+                    <ImagePreview
+                      src={resolveProductImageUrl(form.image)}
+                      alt="Current main product"
+                      name="Current main image"
+                    />
+                  )}
+                </div>
+              )}
               <input type="hidden" name="image" value={form.image} />
             </label>
             <label className="flex flex-col gap-1 text-xs font-semibold text-[#272727] sm:col-span-2 lg:col-span-3">
@@ -310,21 +357,29 @@ export default function AdminProducts() {
                 name="galleryFiles"
                 multiple
                 accept="image/jpeg, image/png, image/webp"
-                onChange={(event) => {
-                  setGalleryFiles(Array.from(event.target.files || []));
-                }}
-                className="rounded-md border border-[#d0d5dd] px-3 py-2 text-sm font-normal"
+                onChange={(event) => updateGalleryFiles(Array.from(event.target.files || []))}
+                className={imageInputClassName}
               />
               {form.gallery.map((image, index) => (
                 <input key={`${image}-${index}`} type="hidden" name="gallery" value={image} />
               ))}
               {(form.gallery.length > 0 || galleryFiles.length > 0) && (
-                <div className="mt-2 flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2">
                   {form.gallery.map((image, index) => (
-                    <img key={`${image}-${index}`} src={resolveProductImageUrl(image)} alt={`Gallery image ${index + 1}`} className="h-16 w-12 rounded-md bg-[#f0f0f0] object-cover" />
+                    <ImagePreview
+                      key={`${image}-${index}`}
+                      src={resolveProductImageUrl(image)}
+                      alt={`Gallery image ${index + 1}`}
+                      name={`Gallery image ${index + 1}`}
+                    />
                   ))}
-                  {galleryFiles.map((file, index) => (
-                    <span key={`${file.name}-${index}`} className="rounded-md bg-[#f4f6fa] px-2 py-1 font-normal text-[#646464]">{file.name}</span>
+                  {galleryFiles.map(({ file, url }) => (
+                    <ImagePreview
+                      key={`${file.name}-${file.lastModified}`}
+                      src={url}
+                      alt={file.name}
+                      name={file.name}
+                    />
                   ))}
                 </div>
               )}
