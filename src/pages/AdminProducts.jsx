@@ -154,9 +154,32 @@ export default function AdminProducts() {
     setIsSaving(true);
     setFormError("");
 
-    const payload = new FormData(event.currentTarget);
-
     try {
+      let uploadedImages = { image: null, gallery: [] };
+      if (imageFile || galleryFiles.length > 0) {
+        const uploadPayload = new FormData();
+        if (imageFile) uploadPayload.append("imageFile", imageFile.file);
+        galleryFiles.forEach(({ file }) => uploadPayload.append("galleryFiles", file));
+
+        const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/uploads`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: uploadPayload,
+        });
+        const uploadBody = await uploadResponse.json().catch(() => ({}));
+
+        if (!uploadResponse.ok) {
+          throw new Error(uploadBody.msg || "Could not upload the selected images.");
+        }
+        uploadedImages = uploadBody.data;
+      }
+
+      const image = uploadedImages.image || form.image;
+      const gallery = [
+        ...form.gallery.filter((galleryImage) => galleryImage !== form.image && galleryImage !== image),
+        ...uploadedImages.gallery,
+      ];
+      const payload = { ...form, image, gallery };
       const response = await fetch(
         editingId
           ? `${import.meta.env.VITE_API_URL}/api/admin/products/${editingId}`
@@ -165,8 +188,9 @@ export default function AdminProducts() {
           method: editingId ? "PUT" : "POST",
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
-          body: payload,
+          body: JSON.stringify(payload),
         },
       );
 
@@ -310,7 +334,7 @@ export default function AdminProducts() {
                 required={!form.image && !imageFile}
                 type="file"
                 name="imageFile"
-                accept="image/jpeg,image/png,image/webp,image/gif"
+                accept="image/jpeg,image/png,image/webp"
                 ref={imageInputRef}
                 onChange={(event) => updateImageFile(event.target.files?.[0] || null)}
                 className={imageInputClassName}
