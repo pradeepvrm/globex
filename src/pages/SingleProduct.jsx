@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import useLocalStorage from "../data/useLocalStorage";
-import { fetchApi, resolveProductImageUrl } from "../data/api";
+import { fetchApi } from "../data/api";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
 const colors = ["Blue", "Black", "White"];
@@ -255,7 +255,7 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
     );
   }
 
-  const gallery = (product.gallery?.length ? product.gallery : [product.image]).map(resolveProductImageUrl);
+  const gallery = (product.gallery?.length ? product.gallery : [product.image]);
   const heroImage = gallery[selectedImageIndex % gallery.length];
   const galleryThumbnails = Array.from({ length: 5 }, (_, index) => gallery[index % gallery.length]);
   const discount = product.originalPrice > product.price
@@ -375,7 +375,7 @@ function SingleProductView({ productId, cartStorageKey, wishlistStorageKey }) {
                     onClick={() => setSelectedColor(color)}
                     className={`h-18.5 w-18.5 overflow-hidden rounded-md border-2 ${selectedColor === color ? "border-[#00398f]" : "border-transparent"}`}
                   >
-                    <img src={heroImage} alt="" className="h-full w-full object-cover" />
+                    <img src={gallery[0]} alt="" className="h-full w-full object-cover" />
                   </button>
                 ))}
               </div>

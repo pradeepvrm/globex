@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { resolveProductImageUrl } from "../data/api";
 
 export default function ProductCard({
   id,
@@ -27,7 +26,7 @@ export default function ProductCard({
     >
       <div className={`${isLarge || isTrending ? "aspect-410/301" : "aspect-4/3"} w-full overflow-hidden rounded-t-lg bg-[#c4c4c4]`}>
         <Link to={`/products/${id}`}>
-          <img src={resolveProductImageUrl(image)} alt={imageAlt} className="h-full w-full object-cover" />
+          <img src={image} alt={imageAlt} className="h-full w-full object-cover" />
           </Link>
       </div>
 

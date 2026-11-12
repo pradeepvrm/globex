@@ -1,6 +1,6 @@
 import { Link, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchApi, resolveProductImageUrl } from "../data/api";
+import { fetchApi } from "../data/api";
 import { useAuth } from "../auth/AuthContext";
 
 const formatPrice = (amount) => `Rs. ${Number(amount || 0).toLocaleString("en-IN")}`;
@@ -140,7 +140,7 @@ function OrderCard({ order }) {
           {items.map((item) => (
             <li key={`${item.id}-${item.size || "one-size"}`} className="flex items-center gap-3 px-4 py-4 sm:px-5">
               <Link to={`/products/${item.id}`} className="shrink-0">
-                <img src={resolveProductImageUrl(item.image)} alt={item.imageAlt || item.name} className="h-20 w-16 rounded-md bg-[#f0f0f0] object-cover" />
+                <img src={item.image} alt={item.imageAlt || item.name} className="h-20 w-16 rounded-md bg-[#f0f0f0] object-cover" />
               </Link>
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] text-[#848484]">{item.brand}</p>

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
-import { resolveProductImageUrl } from "../data/api";
 
 const CATEGORIES = ["men", "women", "kids"];
 const imageInputClassName =
@@ -337,7 +336,7 @@ export default function AdminProducts() {
                   ))}
                   {!imageFile && form.image && (
                     <ImagePreview
-                      src={resolveProductImageUrl(form.image)}
+                      src={form.image}
                       alt="Current main product"
                       name="Current main image"
                     />
@@ -368,7 +367,7 @@ export default function AdminProducts() {
                   {form.gallery.map((image, index) => (
                     <ImagePreview
                       key={`${image}-${index}`}
-                      src={resolveProductImageUrl(image)}
+                      src={image}
                       alt={`Gallery image ${index + 1}`}
                       name={`Gallery image ${index + 1}`}
                     />
@@ -427,7 +426,7 @@ export default function AdminProducts() {
               {products.map((product) => (
                 <tr key={product.id}>
                   <td className="px-4 py-3">
-                    <img src={resolveProductImageUrl(product.image)} alt={product.imageAlt || product.name} className="h-14 w-11 rounded-md bg-[#f0f0f0] object-cover" />
+                    <img src={product.image} alt={product.imageAlt || product.name} className="h-14 w-11 rounded-md bg-[#f0f0f0] object-cover" />
                   </td>
                   <td className="px-4 py-3">
                     <p className="font-bold text-[#00071b]">{product.name}</p>
