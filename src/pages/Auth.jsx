@@ -150,7 +150,7 @@ function AuthPage({ mode }) {
               <form onSubmit={handleSubmit} className="mt-7 space-y-5">
                 <div>
                   <label htmlFor="auth-username" className="mb-2 block text-sm font-semibold">
-                    Username <i className="opacity-75">or</i> Email
+                    {isSignUp ? "Username" : <>Username <i className="opacity-75">or</i> Email</> }
                   </label>
                   <input
                     id="auth-username"
