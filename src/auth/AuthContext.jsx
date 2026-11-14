@@ -11,7 +11,7 @@ function userFromToken(token) {
     const normalizedPayload = payload.replace(/-/g, "+").replace(/_/g, "/");
     const paddedPayload = normalizedPayload.padEnd(Math.ceil(normalizedPayload.length / 4) * 4, "=");
     const claims = JSON.parse(window.atob(paddedPayload));
-    return { id: claims.sub, username: claims.username, email: claims.email, role: claims.role };
+    return { id: claims.sub, username: claims.username, email: claims.email, fullname: claims.fullname, role: claims.role };
   } catch {
     return null;
   }
